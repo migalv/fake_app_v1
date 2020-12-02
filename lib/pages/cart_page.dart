@@ -136,6 +136,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                   context,
                   MaterialPageRoute(
                     builder: (_) => OrderConfirmationPage(),
+                    settings: RouteSettings(name: "Order Confirmation Page"),
                   ),
                 ),
                 child: Ink(

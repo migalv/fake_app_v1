@@ -1,4 +1,5 @@
 import 'package:fake_app_v1/models/dish_model.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class Cart {
   Map<Dish, int> _dishes;
@@ -11,6 +12,15 @@ class Cart {
         _isCartVisible = isCartVisible;
 
   void addDishToCart(Dish dish) {
+    FirebaseAnalytics().logAddToCart(
+      quantity: 1,
+      itemId: dish.id,
+      itemName: dish.name,
+      itemCategory: dish.cuisineName,
+      price: dish.price,
+      value: totalPrice,
+      currency: "EUR",
+    );
     if (_dishes.containsKey(dish))
       _dishes[dish] += 1;
     else
@@ -18,13 +28,25 @@ class Cart {
   }
 
   void removeDishFromCart(Dish dish) {
+    FirebaseAnalytics().logRemoveFromCart(
+      quantity: 1,
+      itemId: dish.id,
+      itemName: dish.name,
+      itemCategory: dish.cuisineName,
+      price: dish.price,
+      value: totalPrice,
+      currency: "EUR",
+    );
     if (_dishes.containsKey(dish)) {
       _dishes[dish] -= 1;
       if (_dishes[dish] <= 0) _dishes.remove(dish);
     }
   }
 
-  void toggleCartVisibility() => _isCartVisible = !_isCartVisible;
+  void toggleCartVisibility() {
+    FirebaseAnalytics().logViewItemList(itemCategory: "Cart");
+    _isCartVisible = !_isCartVisible;
+  }
 
   void clear() {
     _dishes.clear();

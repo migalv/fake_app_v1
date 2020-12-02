@@ -24,6 +24,7 @@ class CuisineCard extends StatelessWidget {
                 cuisine: cuisine,
                 dishes: cuisine.dishes,
               ),
+              settings: RouteSettings(name: "Cuisine Page"),
             ),
           ),
           child: Stack(

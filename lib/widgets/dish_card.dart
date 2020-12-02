@@ -29,6 +29,7 @@ class DishCard extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (_) => DishPage(dish: dish),
+                          settings: RouteSettings(name: "Dish Page"),
                         ),
                       )
                   : () => showDialog(

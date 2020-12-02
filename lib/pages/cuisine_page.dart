@@ -5,6 +5,7 @@ import 'package:fake_app_v1/pages/home_page.dart';
 import 'package:fake_app_v1/widgets/cart_button.dart';
 import 'package:fake_app_v1/widgets/cart_fab.dart';
 import 'package:fake_app_v1/widgets/dish_card.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
 class CuisinePage extends StatefulWidget {
@@ -31,6 +32,12 @@ class _CuisinePageState extends State<CuisinePage> {
   int _itemCount;
 
   TextStyle _titleTextStyle;
+
+  @override
+  void initState() {
+    FirebaseAnalytics().logViewItemList(itemCategory: widget.cuisine.name);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +112,10 @@ class _CuisinePageState extends State<CuisinePage> {
           child: InkWell(
             onTap: () => Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (_) => HomePage()),
+              MaterialPageRoute(
+                builder: (_) => HomePage(),
+                settings: RouteSettings(name: "Home Page"),
+              ),
             ),
             child: Ink(
               child: Padding(

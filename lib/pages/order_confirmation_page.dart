@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_app_v1/stores/cart.dart';
 import 'package:fake_app_v1/widgets/item_tile.dart';
 import 'package:fake_app_v1/widgets/my_box_shadow.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -19,6 +20,8 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
 
   final _formKey = GlobalKey<FormState>();
   bool _formHasErrors;
+
+  bool _isContactInfoEventSent;
 
   final _phoneMaskFormatter = MaskTextInputFormatter(
     mask: '### ## ## ##',
@@ -60,6 +63,11 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
 
   @override
   void initState() {
+    FirebaseAnalytics().logBeginCheckout(
+      value: Injector.getAsReactive<Cart>().state.totalPrice,
+      currency: "EUR",
+    );
+    _isContactInfoEventSent = false;
     _formHasErrors = false;
     super.initState();
   }
@@ -342,6 +350,12 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
             ),
             hintText: hintText,
           ),
+          onTap: () {
+            if (_isContactInfoEventSent == false) {
+              FirebaseAnalytics().logAddPaymentInfo();
+              _isContactInfoEventSent = true;
+            }
+          },
           obscureText: obscureText,
           inputFormatters: inputFormatters,
           keyboardType: keyboardType,
@@ -581,6 +595,13 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                       DateTime selectedDate = DateTime(date.year, date.month,
                           date.day, time.hour, time.minute);
 
+                      FirebaseAnalytics().logEvent(
+                        name: "Order Date Selected",
+                        parameters: {
+                          "date": selectedDate.microsecondsSinceEpoch,
+                        },
+                      );
+
                       state.didChange(selectedDate);
                       setState(() => _orderTime = selectedDate);
                     }
@@ -640,6 +661,11 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                 "dish": entry.key.toOrderItem(),
               })
           .toList();
+
+      FirebaseAnalytics().logEcommercePurchase(
+        value: cart.totalPrice,
+        currency: "EUR",
+      );
 
       FirebaseFirestore.instance.collection("orders").doc().set(
         {

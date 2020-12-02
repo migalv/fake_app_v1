@@ -3,17 +3,34 @@ import 'dart:ui';
 import 'package:fake_app_v1/models/dish_model.dart';
 import 'package:fake_app_v1/pages/cart_page.dart';
 import 'package:fake_app_v1/stores/cart.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
-class DishPage extends StatelessWidget {
+class DishPage extends StatefulWidget {
   final Dish dish;
 
   const DishPage({
     Key key,
     @required this.dish,
   }) : super(key: key);
+
+  @override
+  _DishPageState createState() => _DishPageState();
+}
+
+class _DishPageState extends State<DishPage> {
+  @override
+  void initState() {
+    FirebaseAnalytics().logViewItem(
+      itemId: widget.dish.id,
+      itemName: widget.dish.name,
+      itemCategory: widget.dish.cuisineName,
+      price: widget.dish.price,
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +57,13 @@ class DishPage extends StatelessWidget {
                     pinned: true,
                     actions: [isPhone ? _buildCartButton() : Container()],
                     flexibleSpace: FlexibleSpaceBar(
-                      title: FittedBox(child: Text("${dish.name}")),
+                      title: FittedBox(child: Text("${widget.dish.name}")),
                       background: Stack(
                         fit: StackFit.expand,
                         children: [
                           Image.asset(
-                            dish.thumbnailImagePath ?? dish.mainImagePath,
+                            widget.dish.thumbnailImagePath ??
+                                widget.dish.mainImagePath,
                             fit: BoxFit.cover,
                           ),
                           const DecoratedBox(
@@ -84,24 +102,24 @@ class DishPage extends StatelessWidget {
                           context: context,
                           descriptionWidth: _descriptionWidth,
                           title: "Descripción del plato",
-                          text: dish.description,
+                          text: widget.dish.description,
                         ),
                         // History
-                        dish.history != null
+                        widget.dish.history != null
                             ? _buildParagraph(
                                 context: context,
                                 descriptionWidth: _descriptionWidth,
                                 title: "Un poco de historia",
-                                text: dish.history,
+                                text: widget.dish.history,
                               )
                             : Container(),
                         // How to eat
-                        dish.howToEat != null
+                        widget.dish.howToEat != null
                             ? _buildParagraph(
                                 context: context,
                                 descriptionWidth: _descriptionWidth,
                                 title: "Como comer",
-                                text: dish.howToEat)
+                                text: widget.dish.howToEat)
                             : Container(),
                         SizedBox(height: 16.0),
                         _buildDishIngredients(context, _descriptionWidth),
@@ -160,7 +178,7 @@ class DishPage extends StatelessWidget {
       );
 
   Widget _buildDishIngredients(BuildContext context, double descriptionWidth) {
-    if (dish.ingredients.isNotEmpty) {
+    if (widget.dish.ingredients.isNotEmpty) {
       List<Widget> children = [
         Align(
           alignment: Alignment.centerLeft,
@@ -173,7 +191,7 @@ class DishPage extends StatelessWidget {
       ];
 
       children.addAll(
-        dish.ingredients.map(
+        widget.dish.ingredients.map(
           (ingredient) => ingredient.allergens != null
               ? ListTile(
                   title: Text(
@@ -207,9 +225,8 @@ class DishPage extends StatelessWidget {
     }
   }
 
-  // ignore: unused_element
   Widget _buildDishAllergens(BuildContext context, double descriptionWidth) {
-    if (dish.allergens.isNotEmpty) {
+    if (widget.dish.allergens.isNotEmpty) {
       List<Widget> children = [
         Align(
           alignment: Alignment.centerLeft,
@@ -222,7 +239,7 @@ class DishPage extends StatelessWidget {
       ];
 
       children.addAll(
-        dish.allergens.map(
+        widget.dish.allergens.map(
           (allergen) => ListTile(
             title: Text(
               allergen,
@@ -250,12 +267,12 @@ class DishPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            "${dish.priceAsString}€",
+            "${widget.dish.priceAsString}€",
             style: Theme.of(context).textTheme.headline4,
           ),
           SizedBox(width: 16.0),
           Text(
-            dish.isSoldInUnits ? "Por unidad" : "",
+            widget.dish.isSoldInUnits ? "Por unidad" : "",
             style: Theme.of(context).textTheme.caption.copyWith(fontSize: 16.0),
           ),
         ],
@@ -272,7 +289,8 @@ class DishPage extends StatelessWidget {
                 child: Material(
                   child: InkWell(
                     onTap: () {
-                      rmCart.setState((cart) => cart.addDishToCart(dish));
+                      rmCart
+                          .setState((cart) => cart.addDishToCart(widget.dish));
 
                       showToast(
                         "Plato añadido al carrito",
@@ -369,7 +387,7 @@ class DishPage extends StatelessWidget {
   Widget _buildUnitSelector(ReactiveModel<Cart> rmCart) {
     double iconSize = 22.0;
     const double iconPadding = 8.0;
-    int units = rmCart.state.dishes[dish] ?? 0;
+    int units = rmCart.state.dishes[widget.dish] ?? 0;
 
     return units > 0
         ? Column(
@@ -387,8 +405,8 @@ class DishPage extends StatelessWidget {
                     elevation: 3,
                     shape: CircleBorder(),
                     child: InkWell(
-                      onTap: () =>
-                          rmCart.setState((cart) => cart.addDishToCart(dish)),
+                      onTap: () => rmCart
+                          .setState((cart) => cart.addDishToCart(widget.dish)),
                       child: Padding(
                         padding: const EdgeInsets.all(iconPadding),
                         child: Ink(
@@ -408,8 +426,8 @@ class DishPage extends StatelessWidget {
                     elevation: 3,
                     shape: CircleBorder(),
                     child: InkWell(
-                      onTap: () => rmCart
-                          .setState((cart) => cart.removeDishFromCart(dish)),
+                      onTap: () => rmCart.setState(
+                          (cart) => cart.removeDishFromCart(widget.dish)),
                       child: Padding(
                         padding: const EdgeInsets.all(iconPadding),
                         child: Ink(
