@@ -1,5 +1,7 @@
 import 'package:fake_app_v1/pages/home_page.dart';
 import 'package:fake_app_v1/stores/cart.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
@@ -21,6 +23,9 @@ class MyApp extends StatelessWidget {
         data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
         child: child,
       ),
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics()),
+      ],
       theme: ThemeData.light().copyWith(
         primaryColor: Colors.amber,
         accentColor: Colors.amber,
