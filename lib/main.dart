@@ -5,12 +5,15 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 Future<void> main() async {
+  bool debugMode = true;
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseAnalytics().setAnalyticsCollectionEnabled(!debugMode);
   // FirestoreRepository().update();
-  runApp(MyApp());
+  initializeDateFormatting('es_ES', null).then((_) => runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {

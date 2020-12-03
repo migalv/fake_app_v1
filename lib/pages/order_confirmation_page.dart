@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import "dart:math";
+import 'package:intl/intl.dart';
 
 class OrderConfirmationPage extends StatefulWidget {
   @override
@@ -565,6 +566,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
         validator: (val) =>
             val == null ? "Porfavor seleciona un día de entrega" : null,
         builder: (state) {
+          final dateFormat = DateFormat.MMMMEEEEd("es_ES").add_Hm();
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -585,6 +587,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                   selectedDate:
                       _orderTime ?? DateTime.now().add(Duration(hours: 24)),
                   dateTileBuilder: _buildDateTile,
+                  monthNameWidget: _buildMonthNameWidget,
                   onWeekSelected: (DateTime date) {},
                   onDateSelected: (DateTime date) async {
                     TimeOfDay time = await showTimePicker(
@@ -608,6 +611,20 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                   },
                 ),
               ),
+              _orderTime != null
+                  ? Wrap(
+                      children: [
+                        Text(
+                          "Hora de entrega seleccionada:",
+                        ),
+                        SizedBox(width: 2),
+                        Text(
+                          dateFormat.format(_orderTime),
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    )
+                  : Container(),
               state.hasError ? _buildErrorText(state.errorText) : Container(),
             ],
           );
@@ -622,8 +639,17 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
         ),
       );
 
-  Widget _buildDateTile(DateTime date, DateTime selectedDate, rowIndex, dayName,
-      isDateMarked, isDateOutOfRange) {
+  Widget _buildDateTile(
+    DateTime date,
+    DateTime selectedDate,
+    int rowIndex,
+    String dayName,
+    bool isDateMarked,
+    bool isDateOutOfRange,
+  ) {
+    // Translation to Spanish
+    dayName = dayNamesInSpanish[date.weekday - 1];
+
     bool isSelectedDate = date.compareTo(selectedDate) == 0;
     Color fontColor = isDateOutOfRange ? Colors.black26 : Colors.black87;
     TextStyle normalStyle =
@@ -648,6 +674,36 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
       child: Column(
         children: _children,
       ),
+    );
+  }
+
+  Widget _buildMonthNameWidget(String monthString) {
+    // We need to reformat the month names to translate them
+    final strings = monthString.split(" ");
+    String monthLabel = "";
+
+    // If the string is translatable, then we translate it
+    for (final string in strings) {
+      String translatedMonth;
+      translatedMonth = monthNamesInSpanish[string];
+
+      if (translatedMonth != null) {
+        monthLabel += "$translatedMonth ";
+      } else {
+        monthLabel += "$string ";
+      }
+    }
+
+    return Container(
+      child: Text(
+        monthLabel,
+        style: TextStyle(
+          fontSize: 17,
+          fontWeight: FontWeight.w600,
+          color: Colors.black87,
+        ),
+      ),
+      padding: EdgeInsets.only(top: 7, bottom: 3),
     );
   }
 
@@ -736,3 +792,43 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
       setState(() => _formHasErrors = true);
   }
 }
+
+const List<String> dayNamesInSpanish = [
+  "Lun",
+  "Mar",
+  "Mie",
+  "Jue",
+  "Vie",
+  "Sab",
+  "Dom",
+];
+
+const Map<String, String> monthNamesInSpanish = {
+  "January": "Enero",
+  "February": "Febrero",
+  "March": "Marzo",
+  "April": "Abril",
+  "May": "Mayo",
+  "June": "Junio",
+  "July": "Julio",
+  "August": "Agosto",
+  "September": "Septiembre",
+  "October": "Octubre",
+  "November": "Noviembre",
+  "December": "Diciembre",
+};
+
+List<String> monthLabels = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+];
