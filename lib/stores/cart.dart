@@ -12,6 +12,11 @@ class Cart {
         _isCartVisible = isCartVisible;
 
   void addDishToCart(Dish dish) {
+    if (_dishes.containsKey(dish))
+      _dishes[dish] += 1;
+    else
+      _dishes[dish] = 1;
+
     FirebaseAnalytics().logAddToCart(
       quantity: 1,
       itemId: dish.id,
@@ -21,13 +26,13 @@ class Cart {
       value: totalPrice,
       currency: "EUR",
     );
-    if (_dishes.containsKey(dish))
-      _dishes[dish] += 1;
-    else
-      _dishes[dish] = 1;
   }
 
   void removeDishFromCart(Dish dish) {
+    if (_dishes.containsKey(dish)) {
+      _dishes[dish] -= 1;
+      if (_dishes[dish] <= 0) _dishes.remove(dish);
+    }
     FirebaseAnalytics().logRemoveFromCart(
       quantity: 1,
       itemId: dish.id,
@@ -37,10 +42,6 @@ class Cart {
       value: totalPrice,
       currency: "EUR",
     );
-    if (_dishes.containsKey(dish)) {
-      _dishes[dish] -= 1;
-      if (_dishes[dish] <= 0) _dishes.remove(dish);
-    }
   }
 
   void toggleCartVisibility() {

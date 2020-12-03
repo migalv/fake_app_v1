@@ -596,7 +596,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                           date.day, time.hour, time.minute);
 
                       FirebaseAnalytics().logEvent(
-                        name: "Order Date Selected",
+                        name: "order_date_selected",
                         parameters: {
                           "date": selectedDate.microsecondsSinceEpoch,
                         },
