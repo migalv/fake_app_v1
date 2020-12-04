@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fake_app_v1/data/fake_app_data.dart';
 import 'package:fake_app_v1/models/cuisine_model.dart';
 import 'package:fake_app_v1/models/dish_model.dart';
 

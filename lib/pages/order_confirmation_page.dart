@@ -4,6 +4,7 @@ import 'package:fake_app_v1/stores/cart.dart';
 import 'package:fake_app_v1/widgets/item_tile.dart';
 import 'package:fake_app_v1/widgets/my_box_shadow.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -737,6 +738,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
           "total_price": cart.totalPrice,
           "delivery_time": _orderTime.millisecondsSinceEpoch,
           "created_at": DateTime.now().millisecondsSinceEpoch,
+          "client_uid": FirebaseAuth.instance?.currentUser?.uid,
         },
       );
 
