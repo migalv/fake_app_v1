@@ -7,22 +7,32 @@ class FirestoreRepository {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> update() async {
-    deleteCuisines();
-    updateCuisines(fakeAppCuisines);
+    List<Dish> firestoreDishes = (await _firestore.collection("dishes").get())
+        .docs
+        .map((doc) => Dish.fromJson(doc.data())..id = doc.id)
+        .toList();
+    List<Cuisine> firestoreCuisines =
+        (await _firestore.collection("cuisines").get()).docs.map((doc) {
+      Cuisine cuisine = Cuisine.fromFirestore(doc);
+      return cuisine
+        ..dishes = firestoreDishes
+            .where((dish) => dish.cuisineName == cuisine.name)
+            .toList();
+    }).toList();
+
+    updateCuisines(firestoreCuisines);
   }
 
   Future<void> updateCuisines(List<Cuisine> cuisines) async {
     int counter = 0;
 
     for (Cuisine cuisine in cuisines) {
-      DocumentReference docRef = _firestore.collection("cuisines").doc();
+      DocumentReference docRef =
+          _firestore.collection("cuisines").doc(cuisine.id);
 
-      cuisine.id = docRef.id;
+      if (cuisine.id == null) cuisine.id = docRef.id;
 
       await docRef.set(cuisine.toJson(), SetOptions(merge: true));
-
-      await deleteDishes();
-      await updateDishesFromCuisine(cuisine);
 
       counter++;
     }
@@ -47,10 +57,11 @@ class FirestoreRepository {
     int counter = 0;
 
     for (Dish dish in cuisine.dishes) {
-      DocumentReference docRef = _firestore.collection("dishes").doc();
+      DocumentReference docRef = _firestore.collection("dishes").doc(dish.id);
 
       dish.cuisineName = cuisine.name;
-      dish.id = docRef.id;
+
+      if (dish.id == null) dish.id = docRef.id;
 
       await docRef.set(dish.toJson(), SetOptions(merge: true));
 

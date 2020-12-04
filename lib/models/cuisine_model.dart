@@ -10,7 +10,7 @@ class Cuisine {
   @JsonKey(ignore: true)
   String id;
   final String name;
-  final List<Dish> dishes;
+  List<Dish> dishes;
   final String imagePath;
   final String thumbnailImagePath;
 

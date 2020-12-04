@@ -4,6 +4,7 @@ import 'package:fake_app_v1/services/firestore_repository.dart';
 import 'package:fake_app_v1/widgets/cart_button.dart';
 import 'package:fake_app_v1/widgets/cart_fab.dart';
 import 'package:fake_app_v1/widgets/cuisine_card.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -43,6 +44,10 @@ class _HomePageState extends State<HomePage> {
           _cuisines = cuisines;
         });
       },
+    );
+    FirebaseAnalytics().setCurrentScreen(
+      screenName: "Home Page",
+      screenClassOverride: "HomePage",
     );
     // _isLoadingData = false;
     // _cuisines = fakeAppCuisines;

@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+bool debugMode = false;
+
 Future<void> main() async {
-  bool debugMode = true;
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseAnalytics().setAnalyticsCollectionEnabled(!debugMode);

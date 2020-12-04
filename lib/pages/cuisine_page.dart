@@ -36,6 +36,10 @@ class _CuisinePageState extends State<CuisinePage> {
   @override
   void initState() {
     FirebaseAnalytics().logViewItemList(itemCategory: widget.cuisine.name);
+    FirebaseAnalytics().setCurrentScreen(
+      screenName: "Cuisine Page",
+      screenClassOverride: "CuisinePage",
+    );
     super.initState();
   }
 

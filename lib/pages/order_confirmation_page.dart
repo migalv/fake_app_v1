@@ -64,6 +64,10 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
 
   @override
   void initState() {
+    FirebaseAnalytics().setCurrentScreen(
+      screenName: "Order Confirmation Page",
+      screenClassOverride: "OrderConfirmationPage",
+    );
     FirebaseAnalytics().logBeginCheckout(
       value: Injector.getAsReactive<Cart>().state.totalPrice,
       currency: "EUR",

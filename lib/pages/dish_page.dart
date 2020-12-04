@@ -27,7 +27,13 @@ class _DishPageState extends State<DishPage> {
       itemId: widget.dish.id,
       itemName: widget.dish.name,
       itemCategory: widget.dish.cuisineName,
+      currency: "EUR",
+      value: widget.dish.price,
       price: widget.dish.price,
+    );
+    FirebaseAnalytics().setCurrentScreen(
+      screenName: "Dish Page",
+      screenClassOverride: "DishPage",
     );
     super.initState();
   }
@@ -225,6 +231,7 @@ class _DishPageState extends State<DishPage> {
     }
   }
 
+  // ignore: unused_element
   Widget _buildDishAllergens(BuildContext context, double descriptionWidth) {
     if (widget.dish.allergens.isNotEmpty) {
       List<Widget> children = [
