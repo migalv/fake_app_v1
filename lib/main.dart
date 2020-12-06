@@ -13,9 +13,13 @@ bool debugMode = false;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  FirebaseAnalytics().setAnalyticsCollectionEnabled(!debugMode);
-  final user = await FirebaseAuth.instance.signInAnonymously();
-  FirebaseAnalytics().setUserId(user.user.uid);
+  if (debugMode) {
+    FirebaseAnalytics().logEvent(name: "debug_user");
+    FirebaseAnalytics().setAnalyticsCollectionEnabled(false);
+  } else {
+    final user = await FirebaseAuth.instance.signInAnonymously();
+    FirebaseAnalytics().setUserId(user.user.uid);
+  }
   // FirestoreRepository().update();
   initializeDateFormatting('es_ES', null).then((_) => runApp(MyApp()));
 }
