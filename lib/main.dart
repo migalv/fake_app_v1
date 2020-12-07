@@ -6,9 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
-bool debugMode = false;
+bool debugMode = true;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +20,7 @@ Future<void> main() async {
     FirebaseAnalytics().setUserId(user.user.uid);
   }
   // FirestoreRepository().update();
-  initializeDateFormatting('es_ES', null).then((_) => runApp(MyApp()));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

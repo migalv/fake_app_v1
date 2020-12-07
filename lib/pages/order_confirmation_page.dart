@@ -11,6 +11,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import "dart:math";
 import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class OrderConfirmationPage extends StatefulWidget {
   @override
@@ -145,6 +146,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
             width: _screenWidth,
             height: _screenHeight,
             fit: BoxFit.cover,
+            alignment: Alignment(0.0, -0.45),
           ),
           _buildLogo(),
           Center(child: _buildMainContainer()),
@@ -567,73 +569,76 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
         ],
       );
 
-  Widget _buildCalendarStrip() => FormField(
-        validator: (val) =>
-            val == null ? "Porfavor seleciona un día de entrega" : null,
-        builder: (state) {
-          final dateFormat = DateFormat.MMMMEEEEd("es_ES").add_Hm();
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: state.hasError
-                      ? Border.all(
-                          color: Theme.of(context).colorScheme.error,
-                        )
-                      : null,
-                  borderRadius: BorderRadius.circular(16.0),
-                ),
-                padding: const EdgeInsets.all(8.0),
-                child: CalendarStrip(
-                  startDate: DateTime.now().add(Duration(hours: 24)),
-                  endDate: DateTime.now().add(Duration(days: 7)),
-                  addSwipeGesture: true,
-                  selectedDate:
-                      _orderTime ?? DateTime.now().add(Duration(hours: 24)),
-                  dateTileBuilder: _buildDateTile,
-                  monthNameWidget: _buildMonthNameWidget,
-                  onWeekSelected: (DateTime date) {},
-                  onDateSelected: (DateTime date) async {
-                    TimeOfDay time = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.fromDateTime(date),
-                    );
-                    if (time != null) {
-                      DateTime selectedDate = DateTime(date.year, date.month,
-                          date.day, time.hour, time.minute);
-
-                      FirebaseAnalytics().logEvent(
-                        name: "order_date_selected",
-                        parameters: {
-                          "date": selectedDate.microsecondsSinceEpoch,
-                        },
+  Widget _buildCalendarStrip() => FutureBuilder(
+        future: initializeDateFormatting('es_ES', null),
+        builder: (_, __) => FormField(
+          validator: (val) =>
+              val == null ? "Porfavor seleciona un día de entrega" : null,
+          builder: (state) {
+            final dateFormat = DateFormat.MMMMEEEEd("es_ES").add_Hm();
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: state.hasError
+                        ? Border.all(
+                            color: Theme.of(context).colorScheme.error,
+                          )
+                        : null,
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: CalendarStrip(
+                    startDate: DateTime.now().add(Duration(hours: 24)),
+                    endDate: DateTime.now().add(Duration(days: 7)),
+                    addSwipeGesture: true,
+                    selectedDate:
+                        _orderTime ?? DateTime.now().add(Duration(hours: 24)),
+                    dateTileBuilder: _buildDateTile,
+                    monthNameWidget: _buildMonthNameWidget,
+                    onWeekSelected: (DateTime date) {},
+                    onDateSelected: (DateTime date) async {
+                      TimeOfDay time = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.fromDateTime(date),
                       );
+                      if (time != null) {
+                        DateTime selectedDate = DateTime(date.year, date.month,
+                            date.day, time.hour, time.minute);
 
-                      state.didChange(selectedDate);
-                      setState(() => _orderTime = selectedDate);
-                    }
-                  },
+                        FirebaseAnalytics().logEvent(
+                          name: "order_date_selected",
+                          parameters: {
+                            "date": selectedDate.microsecondsSinceEpoch,
+                          },
+                        );
+
+                        state.didChange(selectedDate);
+                        setState(() => _orderTime = selectedDate);
+                      }
+                    },
+                  ),
                 ),
-              ),
-              _orderTime != null
-                  ? Wrap(
-                      children: [
-                        Text(
-                          "Hora de entrega seleccionada:",
-                        ),
-                        SizedBox(width: 2),
-                        Text(
-                          dateFormat.format(_orderTime),
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    )
-                  : Container(),
-              state.hasError ? _buildErrorText(state.errorText) : Container(),
-            ],
-          );
-        },
+                _orderTime != null
+                    ? Wrap(
+                        children: [
+                          Text(
+                            "Hora de entrega seleccionada:",
+                          ),
+                          SizedBox(width: 2),
+                          Text(
+                            dateFormat.format(_orderTime),
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )
+                    : Container(),
+                state.hasError ? _buildErrorText(state.errorText) : Container(),
+              ],
+            );
+          },
+        ),
       );
 
   Widget _buildErrorText(String errorText) => Text(

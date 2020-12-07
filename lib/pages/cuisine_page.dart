@@ -114,7 +114,7 @@ class _CuisinePageState extends State<CuisinePage> {
             left: _isPhone ? 0.0 : 24.0,
           ),
           child: InkWell(
-            onTap: () => Navigator.pushReplacement(
+            onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => HomePage(),

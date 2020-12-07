@@ -20,8 +20,9 @@ class DishCard extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(8.0),
+        clipBehavior: Clip.antiAlias,
         elevation: 3,
+        borderRadius: BorderRadius.circular(8.0),
         child: InkWell(
           onTap: isClickable
               ? isPhone
