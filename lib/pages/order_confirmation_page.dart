@@ -2,6 +2,7 @@ import 'package:calendar_strip/calendar_strip.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_app_v1/stores/cart.dart';
 import 'package:fake_app_v1/widgets/item_tile.dart';
+import 'package:fake_app_v1/widgets/more_info_buton.dart';
 import 'package:fake_app_v1/widgets/my_box_shadow.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -239,7 +240,12 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 16.0),
+            SizedBox(height: 8.0),
+            Align(
+              alignment: Alignment.centerRight,
+              child: MoreInfoButton(),
+            ),
+            SizedBox(height: 8.0),
             _buildDeliveryTimeSection(),
             SizedBox(height: 16.0),
             _buildLocationSection(),
@@ -279,6 +285,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          MoreInfoButton(),
           _buildDeliveryTimeSection(),
           SizedBox(height: 16.0),
           _buildLocationSection(),
@@ -588,7 +595,6 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                         : null,
                     borderRadius: BorderRadius.circular(16.0),
                   ),
-                  padding: const EdgeInsets.all(8.0),
                   child: CalendarStrip(
                     startDate: DateTime.now().add(Duration(hours: 24)),
                     endDate: DateTime.now().add(Duration(days: 7)),

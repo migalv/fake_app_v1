@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:fake_app_v1/models/dish_model.dart';
 import 'package:fake_app_v1/pages/cart_page.dart';
 import 'package:fake_app_v1/stores/cart.dart';
+import 'package:fake_app_v1/widgets/more_info_buton.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
@@ -104,6 +105,13 @@ class _DishPageState extends State<DishPage> {
                     delegate: SliverChildListDelegate(
                       [
                         // Description
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: MoreInfoButton(),
+                          ),
+                        ),
                         _buildParagraph(
                           context: context,
                           descriptionWidth: _descriptionWidth,

@@ -5,6 +5,7 @@ import 'package:fake_app_v1/pages/home_page.dart';
 import 'package:fake_app_v1/widgets/cart_button.dart';
 import 'package:fake_app_v1/widgets/cart_fab.dart';
 import 'package:fake_app_v1/widgets/dish_card.dart';
+import 'package:fake_app_v1/widgets/more_info_buton.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
@@ -200,15 +201,27 @@ class _CuisinePageState extends State<CuisinePage> {
         ),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: Icon(Icons.arrow_back),
+            SizedBox(
+              height: 8.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(Icons.arrow_back),
+                    ),
+                  ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: MoreInfoButton(),
+                ),
+              ],
             ),
             GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

@@ -10,34 +10,34 @@ class MoreInfoButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8.0),
-      child: Container(
-        constraints: BoxConstraints(maxWidth: maxWidth),
-        child: Material(
-          child: InkWell(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => FAQsPage(),
-                settings: RouteSettings(name: "FAQs Page"),
-              ),
+    return Container(
+      constraints: BoxConstraints(maxWidth: maxWidth),
+      child: Material(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.black.withOpacity(0.04),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => FAQsPage(),
+              settings: RouteSettings(name: "FAQs Page"),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Ink(
-                child: Row(
-                  children: [
-                    Icon(Icons.info_outline),
-                    SizedBox(width: 4.0),
-                    Text(
-                      "Saber más",
-                      style: TextStyle(
-                        fontSize: 18.0,
-                      ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Ink(
+              child: Row(
+                children: [
+                  Icon(Icons.info_outline),
+                  SizedBox(width: 4.0),
+                  Text(
+                    "Saber más",
+                    style: TextStyle(
+                      fontSize: 18.0,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
