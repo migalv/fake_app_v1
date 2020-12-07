@@ -4,6 +4,7 @@ import 'package:fake_app_v1/services/firestore_repository.dart';
 import 'package:fake_app_v1/widgets/cart_button.dart';
 import 'package:fake_app_v1/widgets/cart_fab.dart';
 import 'package:fake_app_v1/widgets/cuisine_card.dart';
+import 'package:fake_app_v1/widgets/more_info_buton.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,7 @@ class _HomePageState extends State<HomePage> {
 
   double _horizontalPadding;
   double _verticalPadding;
-  double _lateralPadding;
+  double _lateralMargin;
 
   TextStyle _titleTextStyle;
 
@@ -75,7 +76,7 @@ class _HomePageState extends State<HomePage> {
 
     // Alignments
     _crossAxisAlignment = CrossAxisAlignment.start;
-    _lateralPadding = 64.0;
+    _lateralMargin = 64.0;
 
     // Tablet
     if (_screenWidth <= 1024 && _screenWidth > 768) {
@@ -89,14 +90,14 @@ class _HomePageState extends State<HomePage> {
       _titleTextStyle =
           Theme.of(context).textTheme.headline4.copyWith(fontSize: 24.0);
       _horizontalPadding = 24.0;
-      _lateralPadding = 32.0;
+      _lateralMargin = 32.0;
 
       if (_screenWidth < 650 && _screenWidth >= 450) {
         _cardsPerRow = 1;
       } else if (_screenWidth < 450) {
         _cardsPerRow = 1;
         _horizontalPadding = 16.0;
-        _lateralPadding = 0.0;
+        _lateralMargin = 0.0;
       }
     }
 
@@ -151,7 +152,7 @@ class _HomePageState extends State<HomePage> {
       );
 
   Widget _buildCuisineList() => Container(
-        margin: EdgeInsets.symmetric(horizontal: _lateralPadding),
+        margin: EdgeInsets.symmetric(horizontal: _lateralMargin),
         constraints: BoxConstraints(
           minHeight: _screenHeight - _bannerHeight,
           maxHeight: _isLoadingData
@@ -188,6 +189,10 @@ class _HomePageState extends State<HomePage> {
                   style: _titleTextStyle,
                   textAlign: TextAlign.center,
                 ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: MoreInfoButton(),
               ),
               _isLoadingData
                   ? Expanded(child: Center(child: CircularProgressIndicator()))
