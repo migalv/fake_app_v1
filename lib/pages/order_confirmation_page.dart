@@ -748,7 +748,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
           "client_phone": _phoneController.text,
           "total_price": cart.totalPrice,
           "delivery_time": _orderTime.millisecondsSinceEpoch,
-          "created_at": DateTime.now().millisecondsSinceEpoch,
+          "created_at": FieldValue.serverTimestamp(),
           "client_uid": FirebaseAuth.instance?.currentUser?.uid,
         },
       );
