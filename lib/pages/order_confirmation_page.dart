@@ -25,6 +25,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
 
   final _formKey = GlobalKey<FormState>();
   bool _formHasErrors;
+  bool _orderDateSelectedEventSent;
 
   bool _isContactInfoEventSent;
 
@@ -82,6 +83,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
       FBParams(),
     );
     _isContactInfoEventSent = false;
+    _orderDateSelectedEventSent = false;
     _formHasErrors = false;
     super.initState();
   }
@@ -374,7 +376,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
           onTap: () {
             if (_isContactInfoEventSent == false) {
               FirebaseAnalytics().logAddPaymentInfo();
-              _isContactInfoEventSent = true;
+              setState(() => _isContactInfoEventSent = true);
             }
           },
           obscureText: obscureText,
@@ -619,12 +621,20 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                         DateTime selectedDate = DateTime(date.year, date.month,
                             date.day, time.hour, time.minute);
 
-                        FirebaseAnalytics().logEvent(
-                          name: "order_date_selected",
-                          parameters: {
-                            "date": selectedDate.microsecondsSinceEpoch,
-                          },
-                        );
+                        if (_orderDateSelectedEventSent == false) {
+                          FirebaseAnalytics().logEvent(
+                            name: "order_date_selected",
+                            parameters: {
+                              "date": selectedDate.millisecondsSinceEpoch,
+                            },
+                          );
+                          logFBPixelEvents(
+                            "track",
+                            "AddPaymentInfo",
+                            FBParams(),
+                          );
+                          setState(() => _orderDateSelectedEventSent = true);
+                        }
 
                         state.didChange(selectedDate);
                         setState(() => _orderTime = selectedDate);
