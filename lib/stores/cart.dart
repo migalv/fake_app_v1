@@ -1,3 +1,4 @@
+import 'package:fake_app_v1/js/fb_pixel.dart';
 import 'package:fake_app_v1/models/dish_model.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
@@ -25,6 +26,17 @@ class Cart {
       price: dish.price,
       value: totalPrice,
       currency: "EUR",
+    );
+
+    logFBPixelEvents(
+      "track",
+      "AddToCart",
+      FBParams(
+          //   content_name: dish.name,
+          //   content_type: "product",
+          //   currency: "EUR",
+          //   value: dish.price,
+          ),
     );
   }
 

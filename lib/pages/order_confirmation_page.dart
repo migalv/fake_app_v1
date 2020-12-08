@@ -13,6 +13,7 @@ import 'package:states_rebuilder/states_rebuilder.dart';
 import "dart:math";
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:fake_app_v1/js/fb_pixel.dart';
 
 class OrderConfirmationPage extends StatefulWidget {
   @override
@@ -74,6 +75,11 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
     FirebaseAnalytics().logBeginCheckout(
       value: Injector.getAsReactive<Cart>().state.totalPrice,
       currency: "EUR",
+    );
+    logFBPixelEvents(
+      "track",
+      "InitiatedCheckout",
+      FBParams(),
     );
     _isContactInfoEventSent = false;
     _formHasErrors = false;
@@ -733,6 +739,12 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                 "dish": entry.key.toOrderItem(),
               })
           .toList();
+
+      logFBPixelEvents(
+        "track",
+        "Purchase",
+        FBParams(),
+      );
 
       FirebaseAnalytics().logEcommercePurchase(
         value: cart.totalPrice,

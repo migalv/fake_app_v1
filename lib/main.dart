@@ -7,13 +7,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
-bool debugMode = false;
+bool debugMode = true;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   if (debugMode) {
-    FirebaseAnalytics().logEvent(name: "debug_user");
+    await FirebaseAnalytics().logEvent(name: "debug_user");
     FirebaseAnalytics().setAnalyticsCollectionEnabled(false);
   } else {
     final user = await FirebaseAuth.instance.signInAnonymously();
