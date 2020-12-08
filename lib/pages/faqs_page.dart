@@ -45,6 +45,7 @@ class _FAQsPageState extends State<FAQsPage> {
     _showEmailInput = false;
     _questionSent = false;
     _emailSent = false;
+    FirebaseAnalytics().logEvent(name: "faqs_view");
     FirebaseAnalytics().setCurrentScreen(
       screenName: "FAQs Page",
       screenClassOverride: "FAQsPage",
