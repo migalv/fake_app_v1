@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fake_app_v1/data/faqs.dart' as data_faqs;
 import 'package:fake_app_v1/models/cuisine_model.dart';
 import 'package:fake_app_v1/models/dish_model.dart';
 
@@ -20,6 +21,15 @@ class FirestoreRepository {
     }).toList();
 
     updateCuisines(firestoreCuisines);
+  }
+
+  Future<void> uploadFAQs() async {
+    for (Map<String, String> faq in data_faqs.faqs) {
+      await _firestore.collection("faqs").add({
+        "question": faq["question"],
+        "answer": faq["answer"],
+      });
+    }
   }
 
   Future<void> updateCuisines(List<Cuisine> cuisines) async {

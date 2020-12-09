@@ -23,7 +23,6 @@ Future<void> main() async {
     final user = await FirebaseAuth.instance.signInAnonymously();
     FirebaseAnalytics().setUserId(user.user.uid);
   }
-  // FirestoreRepository().update();
   runApp(MyApp());
 }
 
