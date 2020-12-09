@@ -1,5 +1,6 @@
 import 'package:calendar_strip/calendar_strip.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fake_app_v1/services/remote_config_service.dart';
 import 'package:fake_app_v1/stores/cart.dart';
 import 'package:fake_app_v1/widgets/item_tile.dart';
 import 'package:fake_app_v1/widgets/more_info_buton.dart';
@@ -79,7 +80,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
     );
     logFBPixelEvents(
       "track",
-      "InitiatedCheckout",
+      "InitiateCheckout",
       FBParams(),
     );
     _isContactInfoEventSent = false;
@@ -591,6 +592,8 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
               val == null ? "Porfavor seleciona un día de entrega" : null,
           builder: (state) {
             final dateFormat = DateFormat.MMMMEEEEd("es_ES").add_Hm();
+            final canOrderSameDay =
+                RemoteConfigService.instance.canOrderSameDay;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -604,18 +607,22 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                     borderRadius: BorderRadius.circular(16.0),
                   ),
                   child: CalendarStrip(
-                    startDate: DateTime.now().add(Duration(hours: 24)),
+                    startDate: canOrderSameDay
+                        ? DateTime.now()
+                        : DateTime.now().add(Duration(hours: 24)),
                     endDate: DateTime.now().add(Duration(days: 7)),
                     addSwipeGesture: true,
-                    selectedDate:
-                        _orderTime ?? DateTime.now().add(Duration(hours: 24)),
+                    selectedDate: _orderTime ??
+                        (canOrderSameDay
+                            ? DateTime.now()
+                            : DateTime.now().add(Duration(hours: 24))),
                     dateTileBuilder: _buildDateTile,
                     monthNameWidget: _buildMonthNameWidget,
                     onWeekSelected: (DateTime date) {},
                     onDateSelected: (DateTime date) async {
                       TimeOfDay time = await showTimePicker(
                         context: context,
-                        initialTime: TimeOfDay.fromDateTime(date),
+                        initialTime: TimeOfDay.now(),
                       );
                       if (time != null) {
                         DateTime selectedDate = DateTime(date.year, date.month,

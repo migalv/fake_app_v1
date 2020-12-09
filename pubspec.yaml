@@ -26,6 +26,7 @@ dependencies:
   calendar_strip: ^1.0.7
   cloud_firestore: ^0.14.3
   cupertino_icons: ^1.0.0
+  firebase: ^7.3.3
   firebase_analytics: ^6.2.0
   firebase_auth: ^0.18.4
   firebase_core: ^0.5.1

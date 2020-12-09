@@ -764,7 +764,7 @@ List<Dish> canadianDishes = [
     mainImagePath:
         "assets/images/dish_images/america/canada/Macaroni-and-cheese-plato-canada.jpg",
     thumbnailImagePath:
-        "assets/america/canada/Macaroni-and-cheese-plato-canada_small.jpg",
+        "assets/images/dish_images/america/canada/Macaroni-and-cheese-plato-canada_small.jpg",
     price: 5.50,
   ),
 ];
