@@ -2,8 +2,10 @@ import 'dart:ui';
 
 import 'package:fake_app_v1/models/dish_model.dart';
 import 'package:fake_app_v1/pages/cart_page.dart';
+import 'package:fake_app_v1/services/remote_config_service.dart';
 import 'package:fake_app_v1/stores/cart.dart';
 import 'package:fake_app_v1/widgets/more_info_buton.dart';
+import 'package:fake_app_v1/widgets/review_carousel.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
@@ -22,8 +24,11 @@ class DishPage extends StatefulWidget {
 }
 
 class _DishPageState extends State<DishPage> {
+  bool _showReviews;
+
   @override
   void initState() {
+    _showReviews = RemoteConfigService.instance.showReviews;
     FirebaseAnalytics().logViewItem(
       itemId: widget.dish.id,
       itemName: widget.dish.name,
@@ -142,6 +147,16 @@ class _DishPageState extends State<DishPage> {
                         Center(
                           child: _buildAddToCartButton(context),
                         ),
+                        if (_showReviews)
+                          widget.dish.reviews.isNotEmpty
+                              ? Center(
+                                  child: ReviewCarousel(
+                                    reviews: widget.dish.reviews,
+                                  ),
+                                )
+                              : Container()
+                        else
+                          Container(),
                       ],
                     ),
                   ),

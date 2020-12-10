@@ -24,7 +24,7 @@ class _ReviewCarouselState extends State<ReviewCarousel> {
 
   @override
   void initState() {
-    if (widget.reviews != null) {
+    if (widget.reviews != null && widget.reviews.isNotEmpty) {
       _numReviews = widget.reviews.length;
       _rating = widget.reviews
               .fold<double>(0.0, (prev, next) => prev += next.rating) /
@@ -35,7 +35,8 @@ class _ReviewCarouselState extends State<ReviewCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      constraints: BoxConstraints(maxWidth: 512.0),
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,6 +72,8 @@ class _ReviewCarouselState extends State<ReviewCarousel> {
                   autoPlay: true,
                   autoPlayInterval: Duration(seconds: 8),
                   enableInfiniteScroll: true,
+                  pauseAutoPlayOnManualNavigate: true,
+                  pauseAutoPlayOnTouch: true,
                 ),
               ),
               Align(

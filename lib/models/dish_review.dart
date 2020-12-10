@@ -1,5 +1,9 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
+part 'dish_review.g.dart';
+
+@JsonSerializable()
 class DishReview {
   final double rating;
   final String headline;
@@ -12,4 +16,8 @@ class DishReview {
     @required this.createdBy,
     @required this.description,
   });
+
+  factory DishReview.fromJson(Map<String, dynamic> json) =>
+      _$DishReviewFromJson(json);
+  Map<String, dynamic> toJson() => _$DishReviewToJson(this);
 }

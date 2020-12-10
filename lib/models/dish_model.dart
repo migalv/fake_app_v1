@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fake_app_v1/models/dish_review.dart';
 import 'package:fake_app_v1/models/ingredient.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
@@ -39,6 +41,10 @@ class Dish {
   /// The path to an image of the dish from a side view perspective
   final String sideViewImage;
 
+  List<DishReview> _reviews;
+
+  List<DishReview> get reviews => _reviews;
+
   String cuisineName;
 
   Set<String> _allergens;
@@ -58,8 +64,10 @@ class Dish {
     this.thumbnailImagePath,
     this.history,
     this.howToEat,
+    List<DishReview> reviews = const [],
   }) {
     _allergens = {};
+    _reviews = reviews;
     for (var ingredient in ingredients) {
       if (ingredient.allergens != null) _allergens.addAll(ingredient.allergens);
     }
@@ -81,4 +89,11 @@ class Dish {
 
   factory Dish.fromJson(Map<String, dynamic> json) => _$DishFromJson(json);
   Map<String, dynamic> toJson() => _$DishToJson(this);
+
+  factory Dish.fromFirestore(DocumentSnapshot doc) {
+    Dish dish = Dish.fromJson(doc.data());
+    dish.id = doc.id;
+
+    return dish;
+  }
 }

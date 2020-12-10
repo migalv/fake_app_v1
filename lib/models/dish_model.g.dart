@@ -23,6 +23,10 @@ Dish _$DishFromJson(Map<String, dynamic> json) {
     thumbnailImagePath: json['thumbnail_image_path'] as String,
     history: json['history'] as String,
     howToEat: json['how_to_eat'] as String,
+    reviews: (json['reviews'] as List)
+        ?.map((e) =>
+            e == null ? null : DishReview.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
@@ -47,6 +51,7 @@ Map<String, dynamic> _$DishToJson(Dish instance) {
   writeNotNull('main_image_path', instance.mainImagePath);
   writeNotNull('thumbnail_image_path', instance.thumbnailImagePath);
   writeNotNull('side_view_image', instance.sideViewImage);
+  writeNotNull('reviews', instance.reviews?.map((e) => e?.toJson())?.toList());
   writeNotNull('cuisine_name', instance.cuisineName);
   return val;
 }

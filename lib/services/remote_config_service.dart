@@ -1,10 +1,14 @@
 import 'package:firebase/firebase.dart';
 
 const String SAME_DAY_ORDER = "same_day_order";
+const String ACTIVATE_DISH_REVIEWS = "activate_dish_reviews";
 
 class RemoteConfigService {
   final RemoteConfig _remoteConfig;
-  final defaults = <String, dynamic>{SAME_DAY_ORDER: true};
+  final defaults = <String, dynamic>{
+    SAME_DAY_ORDER: true,
+    ACTIVATE_DISH_REVIEWS: true,
+  };
 
   static RemoteConfigService _instance;
   static RemoteConfigService get instance {
@@ -16,11 +20,12 @@ class RemoteConfigService {
   }
 
   bool get canOrderSameDay => _remoteConfig.getBoolean(SAME_DAY_ORDER);
+  bool get showReviews => _remoteConfig.getBoolean(ACTIVATE_DISH_REVIEWS);
 
   RemoteConfigService._({RemoteConfig remoteConfig})
       : _remoteConfig = remoteConfig;
 
-  Future initialise({bool debugging = false}) async {
+  Future initialize({bool debugging = false}) async {
     try {
       _remoteConfig.defaultConfig = defaults;
       _remoteConfig.settings.fetchTimeoutMillis =

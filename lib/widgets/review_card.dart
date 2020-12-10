@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fake_app_v1/widgets/star_rating.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +19,13 @@ class ReviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int maxLines = 8;
+    double screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth <= 512.0) {
+      int difference = (512.0 - screenWidth).round();
+      maxLines = max(1, 8 - (difference / 35).round());
+    }
+
     return Card(
       margin: const EdgeInsets.all(8.0),
       elevation: 3.0,
@@ -53,10 +62,12 @@ class ReviewCard extends StatelessWidget {
             SizedBox(
               height: 8.0,
             ),
-            Text(
-              description,
-              maxLines: 5,
-              overflow: TextOverflow.ellipsis,
+            Expanded(
+              child: Text(
+                description,
+                maxLines: maxLines,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ],
         ),

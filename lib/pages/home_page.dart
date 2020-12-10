@@ -50,8 +50,6 @@ class _HomePageState extends State<HomePage> {
       screenName: "Home Page",
       screenClassOverride: "HomePage",
     );
-    // _isLoadingData = false;
-    // _cuisines = fakeAppCuisines;
     super.initState();
   }
 

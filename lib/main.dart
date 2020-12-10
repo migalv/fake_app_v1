@@ -1,4 +1,5 @@
 import 'package:fake_app_v1/pages/home_page.dart';
+import 'package:fake_app_v1/services/firestore_repository.dart';
 import 'package:fake_app_v1/services/remote_config_service.dart';
 import 'package:fake_app_v1/stores/cart.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -14,7 +15,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  await RemoteConfigService.instance.initialise(debugging: debugMode);
+  await RemoteConfigService.instance.initialize(debugging: debugMode);
 
   if (debugMode) {
     await FirebaseAnalytics().logEvent(name: "debug_user");

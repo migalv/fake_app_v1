@@ -33,7 +33,7 @@ class StarRating extends StatelessWidget {
 
     double difference = _maxRating - rating;
 
-    if (difference > 0.0) {
+    if (difference > 0.5) {
       if (difference - difference.floor() == 0.5) {
         difference -= 1;
       }
@@ -54,6 +54,7 @@ class StarRating extends StatelessWidget {
     }
 
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: children,
     );
   }

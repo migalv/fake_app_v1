@@ -1,5 +1,6 @@
 import 'package:fake_app_v1/models/cuisine_model.dart';
 import 'package:fake_app_v1/models/dish_model.dart';
+import 'package:fake_app_v1/models/dish_review.dart';
 import 'package:fake_app_v1/models/ingredient.dart';
 
 final List<Cuisine> fakeAppCuisines = [
@@ -117,6 +118,15 @@ final List<Dish> spanishDishes = [
     thumbnailImagePath:
         "assets/images/dish_images/europe/spain/pollo_pepitoria_small.jpg",
     price: 7.5,
+    reviews: [
+      DishReview(
+        rating: 3.5,
+        headline: "Me llego el envase roto",
+        createdBy: "Miriam",
+        description:
+            """El envase estaba roto y se salía la salsa. Un desastre aunque he de decir que me lo volvieron a enviar a los 10 minutos 👍 La salsa de pepitoria era un pelín espesa como a mi me gusta""",
+      ),
+    ],
   ),
   Dish(
     name: "Paella Mixta",
@@ -149,6 +159,15 @@ final List<Dish> spanishDishes = [
     thumbnailImagePath:
         "assets/images/dish_images/europe/spain/paella_mixta_small.jpg",
     price: 8.20,
+    reviews: [
+      DishReview(
+        rating: 4,
+        headline: "Tradicional",
+        createdBy: "Daniel",
+        description:
+            """Todo un clásico diría yo, lo bueno es que a mi familia le encanta""",
+      ),
+    ],
   ),
   Dish(
     name: "Marmitako de salmón al azafrán",
@@ -207,6 +226,15 @@ List<Dish> greekDishes = [
     thumbnailImagePath:
         "assets/images/dish_images/europe/greece/Moussaka_small.jpg",
     price: 11,
+    reviews: [
+      DishReview(
+        rating: 4.5,
+        headline: "Casero y menos grasiento",
+        createdBy: "Dolores",
+        description:
+            """He probado mucho Moussakas en diferentes restaurantes y puedo decir que este es un tanto diferente. En mi opinión tiene sabor a casero y es menos grasiento que los de restaurante""",
+      ),
+    ],
   ),
   Dish(
     name: "Yemistá",
@@ -243,6 +271,15 @@ List<Dish> greekDishes = [
         "assets/images/dish_images/europe/greece/Yemitsa_small.jpg",
     isSoldInUnits: true,
     price: 1.20,
+    reviews: [
+      DishReview(
+        rating: 5,
+        headline: "Diferente",
+        createdBy: "Ariel",
+        description:
+            """No había probado algo parecido anteriormente. Me sorprendió bastante la mezcla de especias""",
+      ),
+    ],
   ),
   Dish(
     name: "Pastitsio",
@@ -295,6 +332,15 @@ List<Dish> belarusianDishes = [
     thumbnailImagePath:
         "assets/images/dish_images/europe/belarus/Draniki_small.jpg",
     price: 1,
+    reviews: [
+      DishReview(
+        rating: 5,
+        headline: "La salsa ágria es un puntazo",
+        createdBy: "Carlos",
+        description:
+            """Buen aperitivo. Nunca había probado la salsa ágria blanca y me pareció un acierto. Pensé que sabría amarga pero para nada.""",
+      ),
+    ],
   ),
   Dish(
     name: "Tsibriki (10 unidades)",
@@ -336,6 +382,15 @@ List<Dish> belarusianDishes = [
     thumbnailImagePath:
         "assets/images/dish_images/europe/belarus/Nalistniki_small.jpg",
     price: 4.5,
+    reviews: [
+      DishReview(
+        rating: 3.5,
+        headline: "Solo me llegaron 4 crepes",
+        createdBy: "Sara",
+        description:
+            """Se equivocaron y tan solo me llegaron 4 crepes en vez de 5. Lo bueno es que me solucionaron el problema y me volvieron a enviar otro en 15 minutos 🙂""",
+      ),
+    ],
   ),
 ];
 
@@ -372,6 +427,15 @@ Hiroshima alberga un museo dedicado a esta variedad gastronómica, el Wood Egg O
     mainImagePath: "assets/images/dish_images/asia/japan/okonomiyaki.jpg",
     thumbnailImagePath:
         "assets/images/dish_images/asia/japan/okonomiyaki_small.jpg",
+    reviews: [
+      DishReview(
+        rating: 5,
+        headline: "Sabor super intenso",
+        createdBy: "Casandra",
+        description:
+            """Me sorprendió mucho el sabor intenso del Okonomiyaki. Si eres atrevido y te gustan lo sabores fuertes asiáticos te lo recomiendo""",
+      ),
+    ],
   ),
   Dish(
     name: "Onigiri",
@@ -393,6 +457,15 @@ La bola de arroz está formada con algo salado o acido que impide el deterioro d
       Ingredient(name: "Yukari (Ciruela japonesa)"),
       Ingredient(name: "Alga nori"),
       Ingredient(name: "Sal"),
+    ],
+    reviews: [
+      DishReview(
+        rating: 4.5,
+        headline: "Son una monada",
+        createdBy: "Verónica",
+        description:
+            """Son una auténtica monada!! Son como triangulitos de arroz envueltos en un alga. Me zampé 4 yo sola 🤭""",
+      ),
     ],
   ),
   Dish(
@@ -529,6 +602,15 @@ List<Dish> indianDishes = [
     mainImagePath: "assets/images/dish_images/asia/india/Samosa.jpg",
     thumbnailImagePath: "assets/images/dish_images/asia/india/Samosa_small.jpg",
     price: 7.50,
+    reviews: [
+      DishReview(
+        rating: 4.5,
+        headline: "muy cucos",
+        createdBy: "Teresa",
+        description:
+            """Los triangulitos me parecieron muy bonitos. No apto para paladares blandos, el sabor del relleno es bastante intenso!""",
+      ),
+    ],
   ),
   Dish(
     name: "Pollo Tikka Masala",
@@ -579,6 +661,14 @@ List<Dish> indianDishes = [
     mainImagePath: "assets/images/dish_images/asia/india/Jalebi.jpg",
     thumbnailImagePath: "assets/images/dish_images/asia/india/Jalebi_small.jpg",
     price: 4.50,
+    reviews: [
+      DishReview(
+        rating: 5,
+        headline: "Riquísimo",
+        createdBy: "Adolfo",
+        description: """Me los comí todos en 5 minutos, buenísimo!""",
+      ),
+    ],
   ),
 ];
 List<Dish> mongolianDishes = [
@@ -626,6 +716,21 @@ List<Dish> mongolianDishes = [
     thumbnailImagePath:
         "assets/images/dish_images/asia/mongolia/khorkhog_small.jpg",
     price: 11,
+    reviews: [
+      DishReview(
+        rating: 5,
+        headline: "Me recuerda a las barbacoas en familia",
+        createdBy: "Ganbold",
+        description:
+            """El cordero es muy parecido al que solíamos comer en Mongolia con la familia. Es cierto que este plato solo lo encuentras en las casas y que no se vende en restaurantes ¡Gracias!""",
+      ),
+      DishReview(
+        rating: 4,
+        headline: "Muy rico",
+        createdBy: "Sandra",
+        description: """Os lo recomiendo!""",
+      ),
+    ],
   ),
 ];
 List<Dish> mexicanDishes = [
@@ -689,6 +794,14 @@ List<Dish> mexicanDishes = [
     thumbnailImagePath:
         "assets/images/dish_images/america/mexico/Totopos_ternera_small.jpg",
     price: 12,
+    reviews: [
+      DishReview(
+        rating: 5,
+        headline: "Muy buenos",
+        createdBy: "Diana",
+        description: """Riquísimos!! Me encantaron""",
+      ),
+    ],
   ),
   Dish(
     name: "Enchilada",
@@ -715,6 +828,14 @@ List<Dish> mexicanDishes = [
     thumbnailImagePath:
         "assets/images/dish_images/america/mexico/Enchilada_small.jpg",
     price: 9,
+    reviews: [
+      DishReview(
+        rating: 4.5,
+        headline: "Mucho queso",
+        createdBy: "Andrea",
+        description: """Mogollón de queso! Muy bueno""",
+      ),
+    ],
   ),
 ];
 List<Dish> canadianDishes = [
@@ -766,6 +887,15 @@ List<Dish> canadianDishes = [
     thumbnailImagePath:
         "assets/images/dish_images/america/canada/Macaroni-and-cheese-plato-canada_small.jpg",
     price: 5.50,
+    reviews: [
+      DishReview(
+        rating: 5,
+        headline: "El queso fundido estaba muy bueno",
+        createdBy: "Lidia",
+        description:
+            """Muy bueno!! No sabía si animarme a probar macarrones con queso y resultó que el queso cremoso y fundido estaba muy bueno""",
+      ),
+    ],
   ),
 ];
 List<Dish> surinameseDishes = [
@@ -797,6 +927,15 @@ List<Dish> surinameseDishes = [
     thumbnailImagePath:
         "assets/images/dish_images/america/suriname/Vatapa_small.jpg",
     price: 6,
+    reviews: [
+      DishReview(
+        rating: 4,
+        headline: "Para atrevidos",
+        createdBy: "Miguel",
+        description:
+            """El sabor es muy fuerte! Tiene una mezcla de especias curiosa y diferente. La salsa era un pelín picante. Nunca había probado comida de Suriname antes y he de decir que me gustó""",
+      ),
+    ],
   ),
   Dish(
     name: "Pastei",
@@ -855,6 +994,15 @@ List<Dish> surinameseDishes = [
     thumbnailImagePath:
         "assets/images/dish_images/america/suriname/Pom_small.jpg",
     price: 10,
+    reviews: [
+      DishReview(
+        rating: 4.5,
+        headline: "Buena cantidad",
+        createdBy: "Nahir",
+        description:
+            """La porción era más grande de lo que aparecía en la foto. El plato se sentía diferente a lo que suelo comer""",
+      ),
+    ],
   ),
 ];
 List<Dish> marrocanDishes = [
@@ -905,6 +1053,15 @@ List<Dish> marrocanDishes = [
     thumbnailImagePath:
         "assets/images/dish_images/africa/morocco/Kefta_small.jpg",
     price: 7.70,
+    reviews: [
+      DishReview(
+        rating: 3,
+        headline: "Me llego muy poca cantidad",
+        createdBy: "Belén",
+        description:
+            """Hable con ellos y me comentaron que el cocinero no había puesto suficiente cantidad. Me enviaron otro nuevo a los 15 minutos""",
+      ),
+    ],
   ),
   Dish(
     name: "Pastilla",
@@ -935,6 +1092,15 @@ List<Dish> marrocanDishes = [
     thumbnailImagePath:
         "assets/images/dish_images/africa/morocco/Pastilla_small.jpg",
     price: 9.50,
+    reviews: [
+      DishReview(
+        rating: 4.5,
+        headline: "Mezcla de dulce y salado",
+        createdBy: "John",
+        description:
+            """Es extraño ya que no se suelen juntar sabores dulces con salados. La combinación de la carne con el el azúcar me resultó sabrosa y diferente. Muy bueno!""",
+      ),
+    ],
   ),
 ];
 List<Dish> egiptianDishes = [
@@ -964,6 +1130,15 @@ List<Dish> egiptianDishes = [
     thumbnailImagePath:
         "assets/images/dish_images/africa/egipt/Kushari_small.jpg",
     price: 5.50,
+    reviews: [
+      DishReview(
+        rating: 5,
+        headline: "Sencillo y rico",
+        createdBy: "Jorge",
+        description:
+            """Como dicen, este plato tiene un origen humilde. Mi sensación es que uno es capaz de sentir su historia. En general yo diría que es un plato sencillo y rico 👌""",
+      ),
+    ],
   ),
   Dish(
     name: "Hummus",
@@ -988,6 +1163,15 @@ List<Dish> egiptianDishes = [
     mainImagePath: "assets/images/dish_images/africa/egipt/Hummus.jpg",
     thumbnailImagePath:
         "assets/images/dish_images/africa/egipt/Hummus_small.jpg",
+    reviews: [
+      DishReview(
+        rating: 4.5,
+        headline: "Es como una sensación extraña",
+        createdBy: "Alejandro",
+        description:
+            """Se nota que no es un hummus industrial. Tiene ese toque de autenticidad que me resultó super curioso. A mi y a mis amigos nos gustó. Un plato curioso""",
+      ),
+    ],
     price: 3.85,
   ),
 ];
@@ -1054,6 +1238,22 @@ List<Dish> ugandanDishes = [
     thumbnailImagePath:
         "assets/images/dish_images/africa/uganda/Mkate_small.jpg",
     price: 4,
+    reviews: [
+      DishReview(
+        rating: 5,
+        headline: "Muy parecido al original",
+        createdBy: "Sarabi",
+        description:
+            """He vivido en Uganda por 5 años y parece que este pastel lo ha hecho la señora que vivía al lado. Solíamos comer este pastel cuando nos invitaba a su casa en Kampala""",
+      ),
+      DishReview(
+        rating: 4,
+        headline: "La canela le da un toque",
+        createdBy: "Antonio",
+        description:
+            """Muy muy esponjoso. El sabor a canela le da un toque especial al pastel que gustó mucho""",
+      ),
+    ],
   ),
 ];
 List<Dish> australianDishes = [
@@ -1077,6 +1277,15 @@ List<Dish> australianDishes = [
     thumbnailImagePath:
         "assets/images/dish_images/oceania/australia/Fish_and_chips_small.jpg",
     price: 8.70,
+    reviews: [
+      DishReview(
+        rating: 4,
+        headline: "Es un plato típico de Reino Unido",
+        createdBy: "Simón",
+        description:
+            """He de decir que los Fish & Chips son un plato típico británico! 😛 Fuera bromas, muy rico todo y bastante tradicional. me recordó a los Fish & Chips caseros que comía en casa de mi tía.""",
+      ),
+    ],
   ),
   Dish(
     name: "Barramundi a la plancha",
@@ -1126,6 +1335,15 @@ List<Dish> australianDishes = [
     thumbnailImagePath:
         "assets/images/dish_images/oceania/australia/Pavlova_small.jpg",
     price: 5.75,
+    reviews: [
+      DishReview(
+        rating: 4,
+        headline: "cortar una nube",
+        createdBy: "Jorge",
+        description:
+            """Me quedé muy asombrado cuando note la ligereza del merengue. El pastel se cortaba muy fácilmente y no era nada espeso. """,
+      ),
+    ],
   ),
 ];
 List<Dish> papuanDishes = [
