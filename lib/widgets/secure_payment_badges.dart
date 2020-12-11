@@ -23,11 +23,11 @@ class SecurePaymentBadges extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.network('assets/icons/visa.svg'),
+              Image.network('assets/assets/icons/visa.svg'),
               SizedBox(width: 16.0),
-              Image.network('assets/icons/mastercard.svg'),
+              Image.network('assets/assets/icons/mastercard.svg'),
               SizedBox(width: 16.0),
-              Image.network('assets/icons/paypal.svg'),
+              Image.network('assets/assets/icons/paypal.svg'),
             ],
           ),
         ),
