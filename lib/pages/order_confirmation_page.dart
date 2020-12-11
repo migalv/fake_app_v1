@@ -31,6 +31,8 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
 
   bool _isContactInfoEventSent;
 
+  bool _isAddressEventSent;
+
   final _phoneMaskFormatter = MaskTextInputFormatter(
     mask: '### ## ## ##',
     filter: {"#": RegExp(r'[0-9]')},
@@ -85,6 +87,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
       FBParams(),
     );
     _isContactInfoEventSent = false;
+    _isAddressEventSent = false;
     _orderDateSelectedEventSent = false;
     _formHasErrors = false;
     super.initState();
@@ -375,7 +378,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
             ),
             hintText: hintText,
           ),
-          onTap: () {
+          onEditingComplete: () {
             if (_isContactInfoEventSent == false) {
               FirebaseAnalytics().logAddPaymentInfo();
               setState(() => _isContactInfoEventSent = true);
@@ -416,6 +419,12 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                   ),
                   border: OutlineInputBorder(),
                 ),
+                onEditingComplete: () {
+                  if (_isAddressEventSent == false) {
+                    FirebaseAnalytics().logEvent(name: "added_address");
+                    setState(() => _isAddressEventSent = true);
+                  }
+                },
                 keyboardType: TextInputType.streetAddress,
                 validator: (value) {
                   if (value.isEmpty) return 'Porfavor introduce una dirección';
@@ -757,10 +766,12 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
       List<Map> itemList;
 
       itemList = cart.dishes.entries
-          .map((entry) => {
-                "units": entry.value,
-                "dish": entry.key.toOrderItem(),
-              })
+          .map(
+            (entry) => {
+              "units": entry.value,
+              "dish": entry.key.toOrderItem(),
+            },
+          )
           .toList();
 
       logFBPixelEvents(
