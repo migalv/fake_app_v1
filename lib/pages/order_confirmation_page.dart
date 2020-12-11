@@ -766,7 +766,10 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
       logFBPixelEvents(
         "track",
         "Purchase",
-        FBParams(),
+        FBParams(
+          currency: "EUR",
+          value: cart.totalPrice,
+        ),
       );
 
       FirebaseAnalytics().logEcommercePurchase(
