@@ -5,6 +5,7 @@ import 'package:fake_app_v1/stores/cart.dart';
 import 'package:fake_app_v1/widgets/item_tile.dart';
 import 'package:fake_app_v1/widgets/more_info_buton.dart';
 import 'package:fake_app_v1/widgets/my_box_shadow.dart';
+import 'package:fake_app_v1/widgets/secure_payment_badges.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -426,98 +427,103 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
         ],
       );
 
-  Widget _buildOrderDetailsContainer({double containerWidth}) => Container(
-        width: containerWidth,
-        margin: EdgeInsets.symmetric(vertical: 32.0),
-        padding: const EdgeInsets.symmetric(
-          vertical: 16.0,
-          horizontal: 24.0,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16.0),
-          boxShadow: [
-            myBoxShadow,
-          ],
-        ),
-        child: StateBuilder<Cart>(
-            observe: () => Injector.getAsReactive<Cart>(),
-            initState: (_, rmCart) => Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Tu pedido",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          .copyWith(fontSize: 26.0),
-                    ),
-                    Center(child: CircularProgressIndicator()),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "TOTAL",
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
-                        Text(
-                          "",
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-            builder: (_, rmCart) {
-              List<Widget> children = [
-                Text(
-                  "Tu pedido",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6
-                      .copyWith(fontSize: 26.0),
-                )
-              ];
-
-              // We add the items from the order
-              children.addAll(rmCart.state.dishes.entries
-                  .map((entry) => ItemTile(
-                        dish: entry.key,
-                        units: entry.value,
-                        isModifyable: false,
-                      ))
-                  .cast<Widget>());
-
-              // We add the total price of the order
-              children.addAll([
-                SizedBox(height: 8.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "TOTAL",
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
-                    Text(
-                      "${rmCart.state.totalPriceString} €",
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                  ],
-                ),
-                _buildPayButton(rmCart.state),
-                _formHasErrors
-                    ? _buildErrorText("Porfavor rellena todos los datos")
-                    : Container(),
-              ]);
-
-              return Column(
+  Widget _buildOrderDetailsContainer({double containerWidth}) {
+    final showSecurePaymentBadges =
+        RemoteConfigService.instance.showSecurePaymentBadges;
+    return Container(
+      width: containerWidth,
+      margin: EdgeInsets.symmetric(vertical: 32.0),
+      padding: const EdgeInsets.symmetric(
+        vertical: 16.0,
+        horizontal: 24.0,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.0),
+        boxShadow: [
+          myBoxShadow,
+        ],
+      ),
+      child: StateBuilder<Cart>(
+          observe: () => Injector.getAsReactive<Cart>(),
+          initState: (_, rmCart) => Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: children,
-              );
-            }),
-      );
+                children: [
+                  Text(
+                    "Tu pedido",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        .copyWith(fontSize: 26.0),
+                  ),
+                  Center(child: CircularProgressIndicator()),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "TOTAL",
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                      Text(
+                        "",
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+          builder: (_, rmCart) {
+            List<Widget> children = [
+              Text(
+                "Tu pedido",
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6
+                    .copyWith(fontSize: 26.0),
+              )
+            ];
+
+            // We add the items from the order
+            children.addAll(rmCart.state.dishes.entries
+                .map((entry) => ItemTile(
+                      dish: entry.key,
+                      units: entry.value,
+                      isModifyable: false,
+                    ))
+                .cast<Widget>());
+
+            // We add the total price of the order
+            children.addAll([
+              SizedBox(height: 8.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "TOTAL",
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                  Text(
+                    "${rmCart.state.totalPriceString} €",
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                ],
+              ),
+              _buildPayButton(rmCart.state),
+              _formHasErrors
+                  ? _buildErrorText("Porfavor rellena todos los datos")
+                  : Container(),
+              showSecurePaymentBadges ? SecurePaymentBadges() : Container(),
+            ]);
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: children,
+            );
+          }),
+    );
+  }
 
   Widget _buildPayButton(Cart cart) => Center(
         child: Padding(
