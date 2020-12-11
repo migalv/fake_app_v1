@@ -616,6 +616,7 @@ List<Dish> indianDishes = [
     name: "Pollo Tikka Masala",
     ingredients: [
       Ingredient(name: "Pollo"),
+      Ingredient(name: "Arroz"),
       Ingredient(name: "Jengibre molido"),
       Ingredient(name: "Cúrcuma"),
       Ingredient(name: "Sal"),
@@ -765,15 +766,16 @@ List<Dish> mexicanDishes = [
     price: 0.90,
   ),
   Dish(
-    name: "Totopos con tenera, pollo y queso",
+    name: "Nachos caseros",
     ingredients: [
       Ingredient(name: "Harina de maíz"),
       Ingredient(name: "Harina de trigo", allergens: ["Gluten"]),
       Ingredient(name: "Clara de huevo", allergens: ["Huevo"]),
-      Ingredient(name: "Carne de ternera picada"),
-      Ingredient(name: "Carne de pollo picada"),
       Ingredient(name: "Queso para gratinar", allergens: ["Leche"]),
       Ingredient(name: "Tomate"),
+      Ingredient(name: "Guacamole"),
+      Ingredient(name: "Aceitunas negras"),
+      Ingredient(name: "Salsa agria"),
       Ingredient(name: "Cebolla"),
       Ingredient(name: "Jalapeños"),
       Ingredient(name: "Pimiento rojo"),
@@ -790,9 +792,9 @@ List<Dish> mexicanDishes = [
     history:
         """Los totopos tradicionales provienen de las culturas prehispánicas, específicamente del nombre de la acción totopochtli, que en náhuatl significa dorar o tostar. El consumo de totopos tradicionales se da principalmente en el sureste de México, en los estados de Oaxaca y Chiapas""",
     mainImagePath:
-        "assets/images/dish_images/america/mexico/Totopos_ternera.jpg",
+        "assets/images/dish_images/america/mexico/nachos_caseros.jpg",
     thumbnailImagePath:
-        "assets/images/dish_images/america/mexico/Totopos_ternera_small.jpg",
+        "assets/images/dish_images/america/mexico/nachos_caseros_small.jpg",
     price: 12,
     reviews: [
       DishReview(
@@ -906,6 +908,7 @@ List<Dish> surinameseDishes = [
       Ingredient(name: "Gambas", allergens: ["Pescado"]),
       Ingredient(name: "Aceite de girasol"),
       Ingredient(name: "Cebolla"),
+      Ingredient(name: "Pimiento rojo"),
       Ingredient(name: "Ajo"),
       Ingredient(name: "Jalapeño"),
       Ingredient(name: "Tomate"),
