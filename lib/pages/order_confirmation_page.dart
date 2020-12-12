@@ -8,6 +8,7 @@ import 'package:fake_app_v1/widgets/my_box_shadow.dart';
 import 'package:fake_app_v1/widgets/secure_payment_badges.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -602,87 +603,171 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
 
   Widget _buildCalendarStrip() => FutureBuilder(
         future: initializeDateFormatting('es_ES', null),
-        builder: (_, __) => FormField(
-          validator: (val) =>
-              val == null ? "Porfavor seleciona un día de entrega" : null,
-          builder: (state) {
-            final dateFormat = DateFormat.MMMMEEEEd("es_ES").add_Hm();
-            final canOrderSameDay =
-                RemoteConfigService.instance.canOrderSameDay;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: state.hasError
-                        ? Border.all(
-                            color: Theme.of(context).colorScheme.error,
-                          )
-                        : null,
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  child: CalendarStrip(
-                    startDate: canOrderSameDay
-                        ? DateTime.now()
-                        : DateTime.now().add(Duration(hours: 24)),
-                    endDate: DateTime.now().add(Duration(days: 7)),
-                    addSwipeGesture: true,
-                    selectedDate: _orderTime ??
-                        (canOrderSameDay
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return FormField(
+              validator: (val) =>
+                  val == null ? "Porfavor seleciona un día de entrega" : null,
+              builder: (state) {
+                final timeAndDateFormat =
+                    DateFormat.MMMMEEEEd("es_ES").add_Hm();
+                final dateFormat = DateFormat.MMMMEEEEd("es_ES");
+                final canOrderSameDay =
+                    RemoteConfigService.instance.canOrderSameDay;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        border: state.hasError
+                            ? Border.all(
+                                color: Theme.of(context).colorScheme.error,
+                              )
+                            : null,
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      child: CalendarStrip(
+                        startDate: canOrderSameDay
                             ? DateTime.now()
-                            : DateTime.now().add(Duration(hours: 24))),
-                    dateTileBuilder: _buildDateTile,
-                    monthNameWidget: _buildMonthNameWidget,
-                    onWeekSelected: (DateTime date) {},
-                    onDateSelected: (DateTime date) async {
-                      TimeOfDay time = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      );
-                      if (time != null) {
-                        DateTime selectedDate = DateTime(date.year, date.month,
-                            date.day, time.hour, time.minute);
-
-                        if (_orderDateSelectedEventSent == false) {
-                          FirebaseAnalytics().logEvent(
-                            name: "order_date_selected",
-                            parameters: {
-                              "date": selectedDate.millisecondsSinceEpoch,
-                            },
+                            : DateTime.now().add(Duration(hours: 24)),
+                        endDate: DateTime.now().add(Duration(days: 7)),
+                        addSwipeGesture: true,
+                        selectedDate: _orderTime ??
+                            (canOrderSameDay
+                                ? DateTime.now()
+                                : DateTime.now().add(Duration(hours: 24))),
+                        dateTileBuilder: _buildDateTile,
+                        monthNameWidget: _buildMonthNameWidget,
+                        onWeekSelected: (DateTime date) {},
+                        onDateSelected: (DateTime date) async {
+                          DateTime selectedTime;
+                          date = date.add(
+                            Duration(
+                              hours: DateTime.now().hour,
+                              minutes: DateTime.now().minute,
+                            ),
                           );
-                          logFBPixelEvents(
-                            "track",
-                            "AddPaymentInfo",
-                            FBParams(),
+                          DateTime maximumDate = DateTime(
+                            date.year,
+                            date.month,
+                            date.day,
+                            23,
+                            59,
                           );
-                          setState(() => _orderDateSelectedEventSent = true);
-                        }
+                          DateTime minimumDate =
+                              DateTime.now().add(Duration(minutes: 30));
+                          await showDialog(
+                            context: context,
+                            builder: (_) => Container(
+                              constraints: BoxConstraints(
+                                maxWidth: 512.0,
+                              ),
+                              child: AlertDialog(
+                                title: Text("Selecciona la hora estimada"),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Wrap(
+                                      children: [
+                                        Text("Selecciona la hora para el: "),
+                                        SizedBox(width: 2),
+                                        Text(
+                                          dateFormat.format(date),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      constraints: BoxConstraints(
+                                        maxHeight: 264.0,
+                                      ),
+                                      child: CupertinoDatePicker(
+                                        mode: CupertinoDatePickerMode.time,
+                                        initialDateTime: date.add(
+                                          Duration(minutes: 30),
+                                        ),
+                                        minimumDate: minimumDate,
+                                        maximumDate: maximumDate,
+                                        onDateTimeChanged: (selection) =>
+                                            selectedTime = selection,
+                                        use24hFormat: true,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                actions: [
+                                  FlatButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text("Cancelar"),
+                                  ),
+                                  RaisedButton(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0,
+                                      vertical: 8.0,
+                                    ),
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text("Confirmar"),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                          if (selectedTime != null) {
+                            DateTime selectedDate = DateTime(
+                              date.year,
+                              date.month,
+                              date.day,
+                              selectedTime.hour,
+                              selectedTime.minute,
+                            );
 
-                        state.didChange(selectedDate);
-                        setState(() => _orderTime = selectedDate);
-                      }
-                    },
-                  ),
-                ),
-                _orderTime != null
-                    ? Wrap(
-                        children: [
-                          Text(
-                            "Hora de entrega seleccionada:",
-                          ),
-                          SizedBox(width: 2),
-                          Text(
-                            dateFormat.format(_orderTime),
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      )
-                    : Container(),
-                state.hasError ? _buildErrorText(state.errorText) : Container(),
-              ],
+                            if (_orderDateSelectedEventSent == false) {
+                              FirebaseAnalytics().logEvent(
+                                name: "order_date_selected",
+                                parameters: {
+                                  "date": selectedDate.millisecondsSinceEpoch,
+                                },
+                              );
+                              logFBPixelEvents(
+                                "track",
+                                "AddPaymentInfo",
+                                FBParams(),
+                              );
+                              setState(
+                                  () => _orderDateSelectedEventSent = true);
+                            }
+
+                            state.didChange(selectedDate);
+                            setState(() => _orderTime = selectedDate);
+                          }
+                        },
+                      ),
+                    ),
+                    _orderTime != null
+                        ? Wrap(
+                            children: [
+                              Text("Hora de entrega seleccionada:"),
+                              SizedBox(width: 2),
+                              Text(
+                                timeAndDateFormat.format(_orderTime),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          )
+                        : Container(),
+                    state.hasError
+                        ? _buildErrorText(state.errorText)
+                        : Container(),
+                  ],
+                );
+              },
             );
-          },
-        ),
+          }
+        },
       );
 
   Widget _buildErrorText(String errorText) => Text(
