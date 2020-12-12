@@ -681,6 +681,16 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                                         ),
                                       ],
                                     ),
+                                    SizedBox(height: 8.0),
+                                    Text(
+                                      "Mínimo dentro de 30 minutos",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1
+                                          .copyWith(
+                                            color: Theme.of(context).errorColor,
+                                          ),
+                                    ),
                                     Container(
                                       constraints: BoxConstraints(
                                         maxHeight: 264.0,
@@ -797,7 +807,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
         fontSize: 17, fontWeight: FontWeight.w800, color: Colors.black87);
     TextStyle dayNameStyle = TextStyle(fontSize: 14.5, color: fontColor);
     List<Widget> _children = [
-      Text(dayName, style: dayNameStyle),
+      FittedBox(child: Text(dayName, style: dayNameStyle)),
       Text(date.day.toString(),
           style: !isSelectedDate ? normalStyle : selectedStyle),
     ];
