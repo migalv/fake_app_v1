@@ -601,184 +601,178 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
         ],
       );
 
-  Widget _buildCalendarStrip() => FutureBuilder(
-        future: initializeDateFormatting('es_ES', null),
-        builder: (_, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else {
-            return FormField(
-              validator: (val) =>
-                  val == null ? "Porfavor seleciona un día de entrega" : null,
-              builder: (state) {
-                final timeAndDateFormat =
-                    DateFormat.MMMMEEEEd("es_ES").add_Hm();
-                final dateFormat = DateFormat.MMMMEEEEd("es_ES");
-                final canOrderSameDay =
-                    RemoteConfigService.instance.canOrderSameDay;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: state.hasError
-                            ? Border.all(
-                                color: Theme.of(context).colorScheme.error,
-                              )
-                            : null,
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      child: CalendarStrip(
-                        startDate: canOrderSameDay
+  Widget _buildCalendarStrip() {
+    return FutureBuilder(
+      future: initializeDateFormatting('es_ES', null),
+      builder: (_, snapshot) {
+        return FormField(
+          validator: (val) =>
+              val == null ? "Porfavor seleciona un día de entrega" : null,
+          builder: (state) {
+            final timeAndDateFormat = DateFormat.MMMMEEEEd("es_ES").add_Hm();
+            final dateFormat = DateFormat.MMMMEEEEd("es_ES");
+            final canOrderSameDay =
+                RemoteConfigService.instance.canOrderSameDay;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: state.hasError
+                        ? Border.all(
+                            color: Theme.of(context).colorScheme.error,
+                          )
+                        : null,
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  child: CalendarStrip(
+                    startDate: canOrderSameDay
+                        ? DateTime.now()
+                        : DateTime.now().add(Duration(hours: 24)),
+                    endDate: DateTime.now().add(Duration(days: 7)),
+                    addSwipeGesture: true,
+                    selectedDate: _orderTime ??
+                        (canOrderSameDay
                             ? DateTime.now()
-                            : DateTime.now().add(Duration(hours: 24)),
-                        endDate: DateTime.now().add(Duration(days: 7)),
-                        addSwipeGesture: true,
-                        selectedDate: _orderTime ??
-                            (canOrderSameDay
-                                ? DateTime.now()
-                                : DateTime.now().add(Duration(hours: 24))),
-                        dateTileBuilder: _buildDateTile,
-                        monthNameWidget: _buildMonthNameWidget,
-                        onWeekSelected: (DateTime date) {},
-                        onDateSelected: (DateTime date) async {
-                          DateTime selectedTime;
-                          date = date.add(
-                            Duration(
-                              hours: DateTime.now().hour,
-                              minutes: DateTime.now().minute,
-                            ),
-                          );
-                          DateTime maximumDate = DateTime(
-                            date.year,
-                            date.month,
-                            date.day,
-                            23,
-                            59,
-                          );
-                          DateTime minimumDate =
-                              DateTime.now().add(Duration(minutes: 30));
-                          await showDialog(
-                            context: context,
-                            builder: (_) => Container(
-                              constraints: BoxConstraints(
-                                maxWidth: 512.0,
-                              ),
-                              child: AlertDialog(
-                                title: Text("Selecciona la hora estimada"),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
+                            : DateTime.now().add(Duration(hours: 24))),
+                    dateTileBuilder: _buildDateTile,
+                    monthNameWidget: _buildMonthNameWidget,
+                    onWeekSelected: (DateTime date) {},
+                    onDateSelected: (DateTime date) async {
+                      DateTime selectedTime;
+                      date = date.add(
+                        Duration(
+                          hours: DateTime.now().hour,
+                          minutes: DateTime.now().minute,
+                        ),
+                      );
+                      DateTime maximumDate = DateTime(
+                        date.year,
+                        date.month,
+                        date.day,
+                        23,
+                        59,
+                      );
+                      DateTime minimumDate =
+                          DateTime.now().add(Duration(minutes: 30));
+                      await showDialog(
+                        context: context,
+                        builder: (_) => Container(
+                          constraints: BoxConstraints(
+                            maxWidth: 512.0,
+                          ),
+                          child: AlertDialog(
+                            title: Text("Selecciona la hora estimada"),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Wrap(
                                   children: [
-                                    Wrap(
-                                      children: [
-                                        Text("Selecciona la hora para el: "),
-                                        SizedBox(width: 2),
-                                        Text(
-                                          dateFormat.format(date),
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 8.0),
+                                    Text("Selecciona la hora para el: "),
+                                    SizedBox(width: 2),
                                     Text(
-                                      "Mínimo dentro de 30 minutos",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle1
-                                          .copyWith(
-                                            color: Theme.of(context).errorColor,
-                                          ),
-                                    ),
-                                    Container(
-                                      constraints: BoxConstraints(
-                                        maxHeight: 264.0,
-                                      ),
-                                      child: CupertinoDatePicker(
-                                        mode: CupertinoDatePickerMode.time,
-                                        initialDateTime: date.add(
-                                          Duration(minutes: 30),
-                                        ),
-                                        minimumDate: minimumDate,
-                                        maximumDate: maximumDate,
-                                        onDateTimeChanged: (selection) =>
-                                            selectedTime = selection,
-                                        use24hFormat: true,
+                                      dateFormat.format(date),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ],
                                 ),
-                                actions: [
-                                  FlatButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: Text("Cancelar"),
+                                SizedBox(height: 8.0),
+                                Text(
+                                  "Mínimo dentro de 30 minutos",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1
+                                      .copyWith(
+                                        color: Theme.of(context).errorColor,
+                                      ),
+                                ),
+                                Container(
+                                  constraints: BoxConstraints(
+                                    maxHeight: 264.0,
                                   ),
-                                  RaisedButton(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0,
-                                      vertical: 8.0,
+                                  child: CupertinoDatePicker(
+                                    mode: CupertinoDatePickerMode.time,
+                                    initialDateTime: date.add(
+                                      Duration(minutes: 30),
                                     ),
-                                    onPressed: () => Navigator.pop(context),
-                                    child: Text("Confirmar"),
+                                    minimumDate: minimumDate,
+                                    maximumDate: maximumDate,
+                                    onDateTimeChanged: (selection) =>
+                                        selectedTime = selection,
+                                    use24hFormat: true,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          );
-                          if (selectedTime != null) {
-                            DateTime selectedDate = DateTime(
-                              date.year,
-                              date.month,
-                              date.day,
-                              selectedTime.hour,
-                              selectedTime.minute,
-                            );
-
-                            if (_orderDateSelectedEventSent == false) {
-                              FirebaseAnalytics().logEvent(
-                                name: "order_date_selected",
-                                parameters: {
-                                  "date": selectedDate.millisecondsSinceEpoch,
-                                },
-                              );
-                              logFBPixelEvents(
-                                "track",
-                                "AddPaymentInfo",
-                                FBParams(),
-                              );
-                              setState(
-                                  () => _orderDateSelectedEventSent = true);
-                            }
-
-                            state.didChange(selectedDate);
-                            setState(() => _orderTime = selectedDate);
-                          }
-                        },
-                      ),
-                    ),
-                    _orderTime != null
-                        ? Wrap(
-                            children: [
-                              Text("Hora de entrega seleccionada:"),
-                              SizedBox(width: 2),
-                              Text(
-                                timeAndDateFormat.format(_orderTime),
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                            actions: [
+                              FlatButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("Cancelar"),
+                              ),
+                              RaisedButton(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                  vertical: 8.0,
+                                ),
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("Confirmar"),
                               ),
                             ],
-                          )
-                        : Container(),
-                    state.hasError
-                        ? _buildErrorText(state.errorText)
-                        : Container(),
-                  ],
-                );
-              },
+                          ),
+                        ),
+                      );
+                      if (selectedTime != null) {
+                        DateTime selectedDate = DateTime(
+                          date.year,
+                          date.month,
+                          date.day,
+                          selectedTime.hour,
+                          selectedTime.minute,
+                        );
+
+                        if (_orderDateSelectedEventSent == false) {
+                          FirebaseAnalytics().logEvent(
+                            name: "order_date_selected",
+                            parameters: {
+                              "date": selectedDate.millisecondsSinceEpoch,
+                            },
+                          );
+                          logFBPixelEvents(
+                            "track",
+                            "AddPaymentInfo",
+                            FBParams(),
+                          );
+                          setState(() => _orderDateSelectedEventSent = true);
+                        }
+
+                        state.didChange(selectedDate);
+                        setState(() => _orderTime = selectedDate);
+                      }
+                    },
+                  ),
+                ),
+                _orderTime != null
+                    ? Wrap(
+                        children: [
+                          Text("Hora de entrega seleccionada:"),
+                          SizedBox(width: 2),
+                          Text(
+                            timeAndDateFormat.format(_orderTime),
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )
+                    : Container(),
+                state.hasError ? _buildErrorText(state.errorText) : Container(),
+              ],
             );
-          }
-        },
-      );
+          },
+        );
+      },
+    );
+  }
 
   Widget _buildErrorText(String errorText) => Text(
         "$errorText",
