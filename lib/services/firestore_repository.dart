@@ -149,7 +149,8 @@ class FirestoreRepository {
   }
 
   Future<List<Cuisine>> downloadData() async {
-    QuerySnapshot snapshot = await _firestore.collection("cuisines").get();
+    QuerySnapshot snapshot =
+        await _firestore.collection("cuisines").orderBy("name").get();
 
     List<Cuisine> cuisines =
         snapshot.docs.map((doc) => Cuisine.fromFirestore(doc)).toList();
