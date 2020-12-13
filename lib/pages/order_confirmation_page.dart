@@ -1,7 +1,9 @@
 import 'package:calendar_strip/calendar_strip.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fake_app_v1/core/utils.dart';
 import 'package:fake_app_v1/services/remote_config_service.dart';
 import 'package:fake_app_v1/stores/cart.dart';
+import 'package:fake_app_v1/widgets/discount_countdown_bar.dart';
 import 'package:fake_app_v1/widgets/item_tile.dart';
 import 'package:fake_app_v1/widgets/more_info_buton.dart';
 import 'package:fake_app_v1/widgets/my_box_shadow.dart';
@@ -118,7 +120,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
 
     _columnSeparation = 16.0;
 
-    _mainContainerTopMargin = 88.0;
+    _mainContainerTopMargin = 144.0;
     _mainContainerVerticalPadding = 24.0;
 
     _textFieldMaxWidth = _mainContainterWidth * 0.6 -
@@ -165,15 +167,16 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
           ),
           _buildLogo(),
           Center(child: _buildMainContainer()),
+          DiscountCountdownBar(),
         ],
       ),
     );
   }
 
   Widget _buildLogo() => Align(
-        alignment: Alignment.topLeft,
+        alignment: Alignment.topRight,
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.fromLTRB(0.0, 80.0, 24.0, 0.0),
           child: Image.asset(
             "assets/images/logo.png",
             scale: 6.0,
@@ -456,34 +459,20 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
       ),
       child: StateBuilder<Cart>(
           observe: () => Injector.getAsReactive<Cart>(),
-          initState: (_, rmCart) => Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Tu pedido",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        .copyWith(fontSize: 26.0),
-                  ),
-                  Center(child: CircularProgressIndicator()),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "TOTAL",
-                        style: Theme.of(context).textTheme.headline5,
-                      ),
-                      Text(
-                        "",
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
           builder: (_, rmCart) {
+            double finalPrice;
+            String finalPriceString;
+            bool applyDiscount = false;
+
+            if (rmCart.state.totalPrice >= 16) {
+              finalPrice = rmCart.state.totalPrice - 10.0;
+              applyDiscount = true;
+            } else {
+              finalPrice = rmCart.state.totalPrice;
+            }
+
+            finalPriceString = Utils.toPriceString(finalPrice);
+
             List<Widget> children = [
               Text(
                 "Tu pedido",
@@ -506,6 +495,18 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
             // We add the total price of the order
             children.addAll([
               SizedBox(height: 8.0),
+              applyDiscount
+                  ? Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        "${rmCart.state.totalPriceString} €",
+                        style: Theme.of(context).textTheme.headline6.copyWith(
+                              color: Colors.black54,
+                              decoration: TextDecoration.lineThrough,
+                            ),
+                      ),
+                    )
+                  : Container(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -514,7 +515,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                     style: Theme.of(context).textTheme.headline5,
                   ),
                   Text(
-                    "${rmCart.state.totalPriceString} €",
+                    "$finalPriceString €",
                     style: Theme.of(context).textTheme.headline6,
                   ),
                 ],

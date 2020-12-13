@@ -4,6 +4,7 @@ import 'package:fake_app_v1/pages/cart_page.dart';
 import 'package:fake_app_v1/pages/home_page.dart';
 import 'package:fake_app_v1/widgets/cart_button.dart';
 import 'package:fake_app_v1/widgets/cart_fab.dart';
+import 'package:fake_app_v1/widgets/discount_countdown_bar.dart';
 import 'package:fake_app_v1/widgets/dish_card.dart';
 import 'package:fake_app_v1/widgets/more_info_buton.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -99,6 +100,7 @@ class _CuisinePageState extends State<CuisinePage> {
               _buildDishList(),
             ],
           ),
+          DiscountCountdownBar(),
           CartPage(),
           CartButton(),
         ],
@@ -111,7 +113,7 @@ class _CuisinePageState extends State<CuisinePage> {
         alignment: Alignment.topLeft,
         child: Padding(
           padding: EdgeInsets.only(
-            top: _isPhone ? 0.0 : 24.0,
+            top: _isPhone ? 40.0 : 24.0,
             left: _isPhone ? 0.0 : 24.0,
           ),
           child: InkWell(

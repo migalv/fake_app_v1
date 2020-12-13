@@ -4,6 +4,7 @@ import 'package:fake_app_v1/models/dish_model.dart';
 import 'package:fake_app_v1/pages/cart_page.dart';
 import 'package:fake_app_v1/services/remote_config_service.dart';
 import 'package:fake_app_v1/stores/cart.dart';
+import 'package:fake_app_v1/widgets/discount_countdown_bar.dart';
 import 'package:fake_app_v1/widgets/more_info_buton.dart';
 import 'package:fake_app_v1/widgets/review_carousel.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -48,6 +49,7 @@ class _DishPageState extends State<DishPage> {
   Widget build(BuildContext context) {
     double _screenWidth = MediaQuery.of(context).size.width;
     double _descriptionWidth = 512.0;
+
     bool isPhone = false;
 
     // PHONE
@@ -59,127 +61,144 @@ class _DishPageState extends State<DishPage> {
     return Container(
       constraints: BoxConstraints(maxWidth: 768.0),
       child: Scaffold(
-        body: Stack(
+        body: Column(
           children: [
-            OKToast(
-              child: CustomScrollView(
-                slivers: [
-                  SliverAppBar(
-                    expandedHeight: 304.0,
-                    pinned: true,
-                    actions: [isPhone ? _buildCartButton() : Container()],
-                    flexibleSpace: FlexibleSpaceBar(
-                      title: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: FittedBox(
-                          child: Text("${widget.dish.name}"),
-                        ),
-                      ),
-                      centerTitle: true,
-                      background: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          Image.asset(
-                            widget.dish.thumbnailImagePath ??
-                                widget.dish.mainImagePath,
-                            fit: BoxFit.cover,
-                          ),
-                          const DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment(0.0, 0.5),
-                                end: Alignment(0.0, 0.0),
-                                colors: <Color>[
-                                  Color(0x60000000),
-                                  Color(0x00000000),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: <Color>[
-                                  Color(0x60000000),
-                                  Color(0x00000000),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        SizedBox(height: 8.0),
-                        Center(
-                          child: Row(
-                            children: [
-                              Expanded(child: _buildPrice(context)),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 16.0),
-                                child: MoreInfoButton(),
-                              ),
-                            ],
-                          ),
-                        ),
-                        // Description
-                        _buildParagraph(
-                          context: context,
-                          descriptionWidth: _descriptionWidth,
-                          title: "Descripción del plato",
-                          text: widget.dish.description,
-                        ),
-                        // History
-                        widget.dish.history != null
-                            ? _buildParagraph(
-                                context: context,
-                                descriptionWidth: _descriptionWidth,
-                                title: "Un poco de historia",
-                                text: widget.dish.history,
-                              )
-                            : Container(),
-                        // How to eat
-                        widget.dish.howToEat != null
-                            ? _buildParagraph(
-                                context: context,
-                                descriptionWidth: _descriptionWidth,
-                                title: "Como comer",
-                                text: widget.dish.howToEat)
-                            : Container(),
-                        SizedBox(height: 16.0),
-                        _buildDishIngredients(context, _descriptionWidth),
-                        SizedBox(height: 16.0),
-                        Center(
-                          child: _buildAddToCartButton(context),
-                        ),
-                        if (_showReviews)
-                          widget.dish.reviews.isNotEmpty
-                              ? Center(
-                                  child: ReviewCarousel(
-                                    reviews: widget.dish.reviews,
-                                  ),
-                                )
-                              : Container()
-                        else
-                          Container(),
-                        SizedBox(height: 16.0),
+            DiscountCountdownBar(),
+            Expanded(
+              child: Stack(
+                children: [
+                  OKToast(
+                    child: CustomScrollView(
+                      slivers: [
+                        _buildAppBar(isPhone: isPhone),
+                        _buildList(descriptionWidth: _descriptionWidth),
                       ],
                     ),
                   ),
+                  isPhone ? CartPage() : Container(),
                 ],
               ),
             ),
-            isPhone ? CartPage() : Container(),
           ],
         ),
       ),
     );
   }
+
+  Widget _buildAppBar({@required bool isPhone}) => SliverAppBar(
+        expandedHeight: 304.0,
+        pinned: true,
+        actions: [isPhone ? _buildCartButton() : Container()],
+        flexibleSpace: FlexibleSpaceBar(
+          title: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: FittedBox(
+              child: Text("${widget.dish.name}"),
+            ),
+          ),
+          centerTitle: true,
+          background: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
+                widget.dish.thumbnailImagePath ?? widget.dish.mainImagePath,
+                fit: BoxFit.cover,
+              ),
+              const DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment(0.0, 0.5),
+                    end: Alignment(0.0, 0.0),
+                    colors: <Color>[
+                      Color(0x60000000),
+                      Color(0x00000000),
+                    ],
+                  ),
+                ),
+              ),
+              const DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: <Color>[
+                      Color(0x60000000),
+                      Color(0x00000000),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+
+  Widget _buildList({@required double descriptionWidth}) => SliverList(
+        delegate: SliverChildListDelegate(
+          [
+            SizedBox(height: 8.0),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: MoreInfoButton(),
+              ),
+            ),
+            Center(
+              child: Container(
+                constraints: BoxConstraints(maxWidth: descriptionWidth),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildPrice(context),
+                    _buildAddToCartButton(context, small: true),
+                  ],
+                ),
+              ),
+            ),
+            // Description
+            _buildParagraph(
+              context: context,
+              descriptionWidth: descriptionWidth,
+              title: "Descripción del plato",
+              text: widget.dish.description,
+            ),
+            // History
+            widget.dish.history != null
+                ? _buildParagraph(
+                    context: context,
+                    descriptionWidth: descriptionWidth,
+                    title: "Un poco de historia",
+                    text: widget.dish.history,
+                  )
+                : Container(),
+            // How to eat
+            widget.dish.howToEat != null
+                ? _buildParagraph(
+                    context: context,
+                    descriptionWidth: descriptionWidth,
+                    title: "Como comer",
+                    text: widget.dish.howToEat,
+                  )
+                : Container(),
+            SizedBox(height: 16.0),
+            _buildDishIngredients(context, descriptionWidth),
+            SizedBox(height: 16.0),
+            Center(child: _buildAddToCartButton(context)),
+            if (_showReviews)
+              widget.dish.reviews.isNotEmpty
+                  ? Center(
+                      child: ReviewCarousel(
+                        reviews: widget.dish.reviews,
+                      ),
+                    )
+                  : Container()
+            else
+              Container(),
+            SizedBox(height: 16.0),
+          ],
+        ),
+      );
 
   Widget _buildParagraph(
           {@required BuildContext context,
@@ -319,14 +338,17 @@ class _DishPageState extends State<DishPage> {
         ],
       );
 
-  Widget _buildAddToCartButton(BuildContext context) => StateBuilder<Cart>(
+  Widget _buildAddToCartButton(BuildContext context, {bool small = false}) =>
+      StateBuilder<Cart>(
         observe: () => Injector.getAsReactive<Cart>(),
         builder: (context, rmCart) {
           return Column(
             children: [
               _buildUnitSelector(rmCart),
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: small
+                    ? const EdgeInsets.all(8.0)
+                    : const EdgeInsets.all(16.0),
                 child: Material(
                   child: InkWell(
                     onTap: () {
@@ -356,8 +378,10 @@ class _DishPageState extends State<DishPage> {
                       // );
                     },
                     child: Ink(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 40.0),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 8.0,
+                        horizontal: small ? 16.0 : 40.0,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.amber,
                         borderRadius: BorderRadius.circular(8.0),
@@ -368,15 +392,20 @@ class _DishPageState extends State<DishPage> {
                           Icon(
                             Icons.add_shopping_cart,
                             color: Colors.white,
-                            size: 24.0,
+                            size: small ? 22.0 : 24.0,
                           ),
                           SizedBox(width: 8.0),
                           Text(
                             "Añadir al carrito",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline5
-                                .copyWith(color: Colors.white),
+                            style: small
+                                ? Theme.of(context)
+                                    .textTheme
+                                    .headline6
+                                    .copyWith(color: Colors.white)
+                                : Theme.of(context)
+                                    .textTheme
+                                    .headline5
+                                    .copyWith(color: Colors.white),
                           ),
                         ],
                       ),
