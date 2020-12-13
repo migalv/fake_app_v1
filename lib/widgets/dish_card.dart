@@ -51,20 +51,36 @@ class DishCard extends StatelessWidget {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                height: 32.0,
+                height: 72.0,
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.9),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Center(
-                  child: Text(
-                    dish.name,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        .copyWith(fontSize: 18.0),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                        child: Text(
+                          dish.name,
+                          style: Theme.of(context).textTheme.headline6,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
+                        child: Text(
+                          "${dish.priceAsString}€",
+                          style: Theme.of(context).textTheme.headline6,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
