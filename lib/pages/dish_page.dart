@@ -69,7 +69,13 @@ class _DishPageState extends State<DishPage> {
                     pinned: true,
                     actions: [isPhone ? _buildCartButton() : Container()],
                     flexibleSpace: FlexibleSpaceBar(
-                      title: FittedBox(child: Text("${widget.dish.name}")),
+                      title: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: FittedBox(
+                          child: Text("${widget.dish.name}"),
+                        ),
+                      ),
+                      centerTitle: true,
                       background: Stack(
                         fit: StackFit.expand,
                         children: [
@@ -109,14 +115,19 @@ class _DishPageState extends State<DishPage> {
                   SliverList(
                     delegate: SliverChildListDelegate(
                       [
-                        // Description
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: MoreInfoButton(),
+                        SizedBox(height: 8.0),
+                        Center(
+                          child: Row(
+                            children: [
+                              Expanded(child: _buildPrice(context)),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: MoreInfoButton(),
+                              ),
+                            ],
                           ),
                         ),
+                        // Description
                         _buildParagraph(
                           context: context,
                           descriptionWidth: _descriptionWidth,
@@ -142,8 +153,7 @@ class _DishPageState extends State<DishPage> {
                             : Container(),
                         SizedBox(height: 16.0),
                         _buildDishIngredients(context, _descriptionWidth),
-                        SizedBox(height: 24.0),
-                        _buildPrice(context),
+                        SizedBox(height: 16.0),
                         Center(
                           child: _buildAddToCartButton(context),
                         ),
@@ -157,6 +167,7 @@ class _DishPageState extends State<DishPage> {
                               : Container()
                         else
                           Container(),
+                        SizedBox(height: 16.0),
                       ],
                     ),
                   ),

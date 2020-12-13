@@ -37,18 +37,23 @@ class _ReviewCarouselState extends State<ReviewCarousel> {
   Widget build(BuildContext context) {
     return Container(
       constraints: BoxConstraints(maxWidth: 512.0),
-      padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Valoraciones",
-            style: Theme.of(context).textTheme.headline5,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              "Valoraciones",
+              style: Theme.of(context).textTheme.headline5,
+            ),
           ),
           SizedBox(height: 8.0),
-          StarRating(
-            rating: _rating,
-            numReviews: _numReviews,
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: StarRating(
+              rating: _rating,
+              numReviews: _numReviews,
+            ),
           ),
           SizedBox(height: 8.0),
           Stack(
