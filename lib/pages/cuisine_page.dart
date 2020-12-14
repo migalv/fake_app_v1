@@ -150,6 +150,7 @@ class _CuisinePageState extends State<CuisinePage> {
                 child: Container(
                   constraints: BoxConstraints(
                     maxWidth: 256.0,
+                    maxHeight: 80.0,
                   ),
                   child: FittedBox(
                     child: Text(

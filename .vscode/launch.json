@@ -8,6 +8,12 @@
             "name": "fake_app_v1",
             "request": "launch",
             "type": "dart"
+        },
+        {
+            "name": "Fake App Profile",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
         }
     ]
 }

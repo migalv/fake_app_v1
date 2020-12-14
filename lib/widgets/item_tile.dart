@@ -1,6 +1,5 @@
 import 'package:fake_app_v1/models/dish_model.dart';
 import 'package:fake_app_v1/stores/cart.dart';
-import 'package:fake_app_v1/widgets/my_box_shadow.dart';
 import 'package:flutter/material.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
@@ -17,60 +16,70 @@ class ItemTile extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Container(
-        height: 96.0,
-        margin: const EdgeInsets.symmetric(vertical: 8.0),
-        padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          color: Colors.white,
-          boxShadow: [
-            myBoxShadow,
-          ],
-        ),
-        child: IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 80.0,
-                width: 80.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  image: DecorationImage(
-                    image: AssetImage(
-                      dish.thumbnailImagePath ?? dish.mainImagePath,
+  Widget build(BuildContext context) {
+    const double imageSize = 80.0;
+    const double containerPadding = 4.0;
+    return Container(
+      height: imageSize + containerPadding * 2,
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      // decoration: BoxDecoration(
+      // borderRadius: BorderRadius.circular(8.0),
+      //   color: Colors.white,
+      //   boxShadow: [
+      //     myBoxShadow,
+      //   ],
+      // ),
+      child: Material(
+        borderRadius: BorderRadius.circular(8.0),
+        elevation: 4,
+        child: Padding(
+          padding: const EdgeInsets.all(containerPadding),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: imageSize,
+                  width: imageSize,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    image: DecorationImage(
+                      image: AssetImage(
+                        dish.thumbnailImagePath ?? dish.mainImagePath,
+                      ),
+                      fit: BoxFit.cover,
                     ),
-                    fit: BoxFit.cover,
                   ),
                 ),
-              ),
-              SizedBox(width: 8.0),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(
-                        "${dish.name}",
-                        style: Theme.of(context).textTheme.subtitle1,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
+                SizedBox(width: 8.0),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Text(
+                          "${dish.name}",
+                          style: Theme.of(context).textTheme.subtitle1,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
                       ),
-                    ),
-                    Text(
-                      "${dish.priceAsString}€",
-                      style: Theme.of(context).textTheme.caption,
-                    ),
-                  ],
+                      Text(
+                        "${dish.priceAsString}€",
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              _buildUnitCounter(context),
-            ],
+                _buildUnitCounter(context),
+              ],
+            ),
           ),
         ),
-      );
+      ),
+    );
+  }
 
   Widget _buildUnitCounter(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;

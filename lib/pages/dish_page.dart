@@ -151,7 +151,6 @@ class _DishPageState extends State<DishPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _buildPrice(context),
-                    Expanded(child: Container()),
                     _buildAddToCartButton(context, small: true),
                   ],
                 ),
@@ -323,19 +322,23 @@ class _DishPageState extends State<DishPage> {
     }
   }
 
-  Widget _buildPrice(BuildContext context) => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
+  Widget _buildPrice(BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             "${widget.dish.priceAsString}€",
             style: Theme.of(context).textTheme.headline4,
           ),
-          SizedBox(width: 16.0),
-          Text(
-            widget.dish.isSoldInUnits ? "Por unidad" : "",
-            style: Theme.of(context).textTheme.caption.copyWith(fontSize: 16.0),
-          ),
+          widget.dish.isSoldInUnits ? SizedBox(width: 8.0) : Container(),
+          widget.dish.isSoldInUnits
+              ? Text(
+                  "Por unidad",
+                  style: Theme.of(context)
+                      .textTheme
+                      .caption
+                      .copyWith(fontSize: 16.0),
+                )
+              : Container(),
         ],
       );
 
