@@ -520,7 +520,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                   ),
                 ],
               ),
-              _buildPayButton(rmCart.state),
+              _buildPayButton(rmCart),
               _formHasErrors
                   ? _buildErrorText("Porfavor rellena todos los datos")
                   : Container(),
@@ -536,12 +536,12 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
     );
   }
 
-  Widget _buildPayButton(Cart cart) => Center(
+  Widget _buildPayButton(ReactiveModel<Cart> rmCart) => Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Material(
             child: InkWell(
-              onTap: () => _pay(cart),
+              onTap: () => _pay(rmCart),
               child: Ink(
                 padding:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 40.0),
@@ -663,16 +663,23 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                             maxWidth: 512.0,
                           ),
                           child: AlertDialog(
-                            title: Text("Selecciona la hora estimada"),
+                            title: Text(
+                              "Selecciona la hora estimada",
+                              textAlign: TextAlign.center,
+                            ),
                             content: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Wrap(
                                   children: [
-                                    Text("Selecciona la hora para el: "),
+                                    Text(
+                                      "Selecciona la hora para el: ",
+                                      textAlign: TextAlign.center,
+                                    ),
                                     SizedBox(width: 2),
                                     Text(
                                       dateFormat.format(date),
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -682,6 +689,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                                 SizedBox(height: 8.0),
                                 Text(
                                   "Mínimo dentro de 30 minutos",
+                                  textAlign: TextAlign.center,
                                   style: Theme.of(context)
                                       .textTheme
                                       .subtitle1
@@ -851,7 +859,8 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
     );
   }
 
-  void _pay(Cart cart) {
+  void _pay(ReactiveModel<Cart> rmCart) {
+    Cart cart = rmCart.state;
     if (_formKey.currentState.validate()) {
       List<Map> itemList;
 
@@ -896,36 +905,46 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Gracias por pedir en Deewi"),
+            title: Text(
+              "¡Gracias por pedir en Deewi!",
+              textAlign: TextAlign.center,
+            ),
             content: Container(
               constraints: BoxConstraints(maxWidth: 300.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  SizedBox(height: 4.0),
                   Text(
-                    "Muchas gracias por hacer un pedido a través de Deewi!",
+                    "Actualmente aún estamos en construcción 🏗️",
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 4.0),
                   Text(
-                    "Desgraciadamente Deewi aún no está disponible en tu zona.",
+                    "Y nos ayudaría un montón conocer tu opinión.",
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 4.0),
                   Text(
-                    "Por las molestias te regalamos un cupón de 20% en tu primer pedido en Deewi.",
+                    "Puede ser que te contactemos para charlar unos minutos 😊",
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(
+                    "Como ya nos conocemos, te dejamos este código:",
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 8.0),
                   FittedBox(
                     child: Text(
-                      "DEEWILLEGA20",
+                      "SOYDELOSPRIMEROS",
                       style: Theme.of(context).textTheme.headline4,
                     ),
                   ),
+                  SizedBox(height: 8.0),
                   Text(
-                    "Utilizalo en tu primer pedido cuando Deewi llegue a tu zona.",
+                    "Utilizalo en tu siguiente pedido y tendremos un regalo para tí.",
                     style: Theme.of(context).textTheme.caption,
                     textAlign: TextAlign.center,
                   ),
@@ -937,6 +956,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.pop(context);
+                  rmCart.setState((cart) => cart.clear());
                 },
                 child: Text("Cerrar"),
               ),
