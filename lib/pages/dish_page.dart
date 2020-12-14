@@ -151,6 +151,7 @@ class _DishPageState extends State<DishPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _buildPrice(context),
+                    Expanded(child: Container()),
                     _buildAddToCartButton(context, small: true),
                   ],
                 ),
@@ -344,10 +345,10 @@ class _DishPageState extends State<DishPage> {
         builder: (context, rmCart) {
           return Column(
             children: [
-              _buildUnitSelector(rmCart),
+              small ? Container() : _buildUnitSelector(rmCart),
               Padding(
                 padding: small
-                    ? const EdgeInsets.all(8.0)
+                    ? const EdgeInsets.all(0.0)
                     : const EdgeInsets.all(16.0),
                 child: Material(
                   child: InkWell(
@@ -396,7 +397,8 @@ class _DishPageState extends State<DishPage> {
                           ),
                           SizedBox(width: 8.0),
                           Text(
-                            "Añadir al carrito",
+                            small ? "Añadir" : "Añadir al carrito",
+                            overflow: TextOverflow.clip,
                             style: small
                                 ? Theme.of(context)
                                     .textTheme
