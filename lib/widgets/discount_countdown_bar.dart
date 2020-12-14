@@ -30,9 +30,13 @@ class DiscountCountdownBar extends StatelessWidget {
               : Wrap(
                   alignment: WrapAlignment.center,
                   children: [
-                    Text(
-                      "Te faltan $discountDifString€ para tus 10€ de descuento ",
-                      style: TextStyle(fontSize: textSize),
+                    FittedBox(
+                      child: Text(
+                        "Te faltan $discountDifString€ para tus 10€ de descuento ",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: textSize),
+                        maxLines: 1,
+                      ),
                     ),
                     Text(
                       "¡Añade algo más!",
