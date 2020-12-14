@@ -63,7 +63,7 @@ class _DishPageState extends State<DishPage> {
       child: Scaffold(
         body: Column(
           children: [
-            DiscountCountdownBar(),
+            isPhone ? DiscountCountdownBar() : Container(),
             Expanded(
               child: Stack(
                 children: [
