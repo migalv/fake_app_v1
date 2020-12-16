@@ -200,27 +200,24 @@ class _DishPageState extends State<DishPage> {
         ),
       );
 
-  Widget _buildParagraph(
-          {@required BuildContext context,
-          @required double descriptionWidth,
-          @required String title,
-          @required String text}) =>
+  Widget _buildParagraph({
+    @required BuildContext context,
+    @required double descriptionWidth,
+    @required String title,
+    @required String text,
+  }) =>
       Center(
-        child: Column(
-          children: [
-            SizedBox(height: 16.0),
-            Container(
-              width: descriptionWidth,
-              alignment: Alignment.centerLeft,
-              child: Text(
-                title,
-                style: Theme.of(context).textTheme.headline5,
-              ),
+        child: Container(
+          width: descriptionWidth,
+          margin: const EdgeInsets.symmetric(vertical: 16.0),
+          child: ExpansionTile(
+            title: Text(
+              title,
+              style: Theme.of(context).textTheme.headline5,
             ),
-            SizedBox(height: 16.0),
-            Center(
-              child: Container(
-                width: descriptionWidth,
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Text(
                   text,
                   softWrap: true,
@@ -231,23 +228,14 @@ class _DishPageState extends State<DishPage> {
                       .copyWith(fontSize: 16.0),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
 
   Widget _buildDishIngredients(BuildContext context, double descriptionWidth) {
     if (widget.dish.ingredients.isNotEmpty) {
-      List<Widget> children = [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            "Ingredientes",
-            style: Theme.of(context).textTheme.headline5,
-          ),
-        ),
-        SizedBox(height: 16.0),
-      ];
+      List<Widget> children = [];
 
       children.addAll(
         widget.dish.ingredients.map(
@@ -274,7 +262,11 @@ class _DishPageState extends State<DishPage> {
       return Center(
         child: Container(
           width: descriptionWidth,
-          child: Column(
+          child: ExpansionTile(
+            title: Text(
+              "Ingredientes",
+              style: Theme.of(context).textTheme.headline5,
+            ),
             children: children,
           ),
         ),
