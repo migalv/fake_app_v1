@@ -113,7 +113,7 @@ class _CuisinePageState extends State<CuisinePage> {
         alignment: Alignment.topLeft,
         child: Padding(
           padding: EdgeInsets.only(
-            top: _isPhone ? 40.0 : 24.0,
+            top: _isPhone ? 56.0 : 24.0,
             left: _isPhone ? 0.0 : 24.0,
           ),
           child: InkWell(
